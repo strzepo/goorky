@@ -1,0 +1,52 @@
+# Włączenie modułu rewrite
+RewriteEngine On
+
+# Podstawowe przekierowania dla podstron
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^bmi/?$ index.php?page=bmi [L,QSA]
+RewriteRule ^calories/?$ index.php?page=calories [L,QSA]
+RewriteRule ^units/?$ index.php?page=units [L,QSA]
+RewriteRule ^dates/?$ index.php?page=dates [L,QSA]
+RewriteRule ^password-generator/?$ index.php?page=password_generator [L,QSA]
+
+# Downloadery
+RewriteRule ^youtube/?$ index.php?page=downloaders_youtube [L,QSA]
+RewriteRule ^instagram/?$ index.php?page=downloaders_instagram [L,QSA]
+RewriteRule ^facebook/?$ index.php?page=downloaders_facebook [L,QSA]
+RewriteRule ^vimeo/?$ index.php?page=downloaders_vimeo [L,QSA]
+
+# Strona główna
+RewriteRule ^/?$ index.php?page=home [L,QSA]
+
+# Zabezpieczenie plików .htaccess i .htpasswd
+<Files ~ "^\.ht">
+  Order deny,allow
+  Deny from all
+</Files>
+
+# Kompresja GZIP dla lepszej wydajności
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/x-javascript text/javascript
+</IfModule>
+
+# Ustawienie nagłówków cache dla lepszej wydajności
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+</IfModule>
+
+# PHP ustawienia
+<IfModule mod_php8.c>
+  php_value upload_max_filesize 64M
+  php_value post_max_size 64M
+  php_value max_execution_time 300
+  php_value max_input_time 300
+</IfModule>

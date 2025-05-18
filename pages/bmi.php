@@ -1,7 +1,7 @@
 <?php
 // Ustawienie tytułu i opisu strony
-$pageTitle = 'Kalkulator BMI - Oblicz swój wskaźnik masy ciała | ToolsOnline';
-$pageDescription = 'Darmowy kalkulator BMI online - szybko oblicz swój wskaźnik masy ciała i sprawdź, czy Twoja waga jest prawidłowa. Prosty i dokładny.';
+$pageTitle = $lang['bmi_page_title'] ?? 'BMI Calculator - Calculate Your Body Mass Index | Goorky.com';
+$pageDescription = $lang['bmi_page_description'] ?? 'Free online BMI calculator - quickly calculate your Body Mass Index and check if your weight is within the healthy range.';
 
 // Inicjalizacja zmiennych
 $weight = '';
@@ -27,55 +27,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_bmi'])) {
         $hasResult = true;
     }
 }
-
-// // Funkcja zwracająca kategorię BMI i kolor na podstawie wartości BMI
-// function getBMICategory($bmi) {
-//     if ($bmi < 16) {
-//         return ['Wygłodzenie', 'text-red-700'];
-//     } elseif ($bmi < 17) {
-//         return ['Wychudzenie', 'text-red-600'];
-//     } elseif ($bmi < 18.5) {
-//         return ['Niedowaga', 'text-yellow-600'];
-//     } elseif ($bmi < 25) {
-//         return ['Prawidłowa waga', 'text-green-600'];
-//     } elseif ($bmi < 30) {
-//         return ['Nadwaga', 'text-yellow-600'];
-//     } elseif ($bmi < 35) {
-//         return ['Otyłość I stopnia', 'text-red-500'];
-//     } elseif ($bmi < 40) {
-//         return ['Otyłość II stopnia', 'text-red-600'];
-//     } else {
-//         return ['Otyłość III stopnia', 'text-red-700'];
-//     }
-// }
-// ?>
+?>
 
 <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Kalkulator BMI</h1>
+    <h1 class="text-3xl font-bold mb-6"><?php echo $lang['bmi_heading'] ?? 'BMI Calculator'; ?></h1>
     
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <p class="mb-4">BMI (Body Mass Index) to wskaźnik masy ciała, który pomaga ocenić, czy waga jest prawidłowa w stosunku do wzrostu. Oblicz swoje BMI już teraz!</p>
+        <p class="mb-4"><?php echo $lang['bmi_intro_text'] ?? 'BMI (Body Mass Index) is an indicator that helps assess whether your weight is appropriate for your height. Calculate your BMI now!'; ?></p>
         
         <form method="POST" action="/bmi" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="weight" class="block text-gray-700 font-medium mb-2">Waga (kg)</label>
-                    <input type="number" name="weight" id="weight" min="20" max="300" step="0.1" value="<?php echo htmlspecialchars($weight); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="np. 70.5">
+                    <label for="weight" class="block text-gray-700 font-medium mb-2"><?php echo $lang['weight_kg'] ?? 'Weight (kg)'; ?></label>
+                    <input type="number" name="weight" id="weight" min="20" max="300" step="0.1" value="<?php echo htmlspecialchars($weight); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="<?php echo $lang['weight_placeholder'] ?? 'e.g. 70.5'; ?>">
                 </div>
                 <div>
-                    <label for="height" class="block text-gray-700 font-medium mb-2">Wzrost (cm)</label>
-                    <input type="number" name="height" id="height" min="50" max="250" step="0.1" value="<?php echo htmlspecialchars($height); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="np. 175">
+                    <label for="height" class="block text-gray-700 font-medium mb-2"><?php echo $lang['height_cm'] ?? 'Height (cm)'; ?></label>
+                    <input type="number" name="height" id="height" min="50" max="250" step="0.1" value="<?php echo htmlspecialchars($height); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="<?php echo $lang['height_placeholder'] ?? 'e.g. 175'; ?>">
                 </div>
             </div>
             <div class="text-center">
-                <button type="submit" name="calculate_bmi" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition">Oblicz BMI</button>
+                <button type="submit" name="calculate_bmi" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate_bmi'] ?? 'Calculate BMI'; ?></button>
             </div>
         </form>
     </div>
     
     <?php if ($hasResult): ?>
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Twój wynik BMI</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['your_bmi_result'] ?? 'Your BMI Result'; ?></h2>
         
         <div class="flex flex-col items-center mb-6">
             <div class="text-5xl font-bold <?php echo $categoryColor; ?>"><?php echo number_format($bmi, 2); ?></div>
@@ -115,11 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_bmi'])) {
                 <span>40</span>
             </div>
             <div class="flex justify-between text-xs text-gray-600 mt-1">
-                <span>Wygłodzenie</span>
-                <span>Niedowaga</span>
-                <span>Prawidłowa</span>
-                <span>Nadwaga</span>
-                <span>Otyłość</span>
+                <span><?php echo $lang['bmi_severe_underweight'] ?? 'Severe Thinness'; ?></span>
+                <span><?php echo $lang['bmi_underweight'] ?? 'Underweight'; ?></span>
+                <span><?php echo $lang['bmi_normal'] ?? 'Normal'; ?></span>
+                <span><?php echo $lang['bmi_overweight'] ?? 'Overweight'; ?></span>
+                <span><?php echo $lang['bmi_obesity'] ?? 'Obesity'; ?></span>
             </div>
         </div>
     </div>
@@ -127,57 +106,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_bmi'])) {
     
     <!-- Informacje o BMI -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Interpretacja wyniku BMI</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['bmi_interpretation'] ?? 'BMI Result Interpretation'; ?></h2>
         
         <div class="overflow-hidden overflow-x-auto mb-4">
             <table class="min-w-full border border-gray-200 divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wartość BMI</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategoria</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Interpretacja</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['bmi_value'] ?? 'BMI Value'; ?></th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['bmi_category'] ?? 'Category'; ?></th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['bmi_interpretation'] ?? 'Interpretation'; ?></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">poniżej 16</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-700">Wygłodzenie</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Występuje poważne niedożywienie. Wymagana natychmiastowa konsultacja z lekarzem.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?php echo $lang['bmi_below'] ?? 'below'; ?> 16</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-700"><?php echo $lang['bmi_severe_thinness'] ?? 'Severe Thinness'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_severe_thinness_desc'] ?? 'Severe malnutrition is present. Immediate medical consultation is required.'; ?></td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">16 - 16.99</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">Wychudzenie</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Występuje niedożywienie. Zalecana konsultacja z lekarzem.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600"><?php echo $lang['bmi_moderate_thinness'] ?? 'Moderate Thinness'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_moderate_thinness_desc'] ?? 'Malnutrition is present. Medical consultation is recommended.'; ?></td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">17 - 18.49</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">Niedowaga</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Masa ciała poniżej normy. Zalecane zwiększenie kaloryczności diety.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600"><?php echo $lang['bmi_underweight'] ?? 'Underweight'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_underweight_desc'] ?? 'Body weight is below normal. Consider increasing calorie intake.'; ?></td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">18.5 - 24.99</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">Prawidłowa waga</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Prawidłowa masa ciała. Utrzymuj zdrowy styl życia.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600"><?php echo $lang['bmi_normal_weight'] ?? 'Normal'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_normal_weight_desc'] ?? 'Normal body weight. Maintain a healthy lifestyle.'; ?></td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">25 - 29.99</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600">Nadwaga</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Masa ciała powyżej normy. Zalecana zmiana nawyków żywieniowych i zwiększenie aktywności fizycznej.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-yellow-600"><?php echo $lang['bmi_overweight'] ?? 'Overweight'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_overweight_desc'] ?? 'Body weight above normal. Recommended dietary changes and more physical activity.'; ?></td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">30 - 34.99</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500">Otyłość I stopnia</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Występuje otyłość. Zalecana konsultacja z lekarzem i dietetykiem.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-500"><?php echo $lang['bmi_obesity_class_1'] ?? 'Obesity Class I'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_obesity_class_1_desc'] ?? 'Obesity is present. Consult a doctor and dietitian.'; ?></td>
                     </tr>
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">35 - 39.99</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">Otyłość II stopnia</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Występuje poważna otyłość. Konieczna konsultacja z lekarzem.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600"><?php echo $lang['bmi_obesity_class_2'] ?? 'Obesity Class II'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_obesity_class_2_desc'] ?? 'Severe obesity is present. Medical consultation is necessary.'; ?></td>
                     </tr>
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">40 i więcej</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-700">Otyłość III stopnia</td>
-                        <td class="px-6 py-4 text-sm text-gray-700">Występuje skrajna otyłość. Wymagana pilna interwencja medyczna.</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">40 <?php echo $lang['bmi_and_above'] ?? 'and above'; ?></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-700"><?php echo $lang['bmi_obesity_class_3'] ?? 'Obesity Class III'; ?></td>
+                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo $lang['bmi_obesity_class_3_desc'] ?? 'Extreme obesity is present. Urgent medical intervention is required.'; ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -186,26 +165,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_bmi'])) {
     
     <!-- Informacje o BMI -->
     <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-semibold mb-4">O wskaźniku BMI</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['about_bmi'] ?? 'About BMI'; ?></h2>
         
         <div class="space-y-4">
-            <p>BMI (Body Mass Index) to wskaźnik opracowany przez belgijskiego matematyka Adolphe'a Queteleta w XIX wieku. Jest powszechnie stosowany do oceny prawidłowej masy ciała.</p>
+            <p><?php echo $lang['bmi_description_1'] ?? 'BMI (Body Mass Index) was developed by Belgian mathematician Adolphe Quetelet in the 19th century. It is commonly used to assess healthy body weight.'; ?></p>
             
-            <p>BMI oblicza się dzieląc masę ciała (w kilogramach) przez kwadrat wzrostu (w metrach):</p>
+            <p><?php echo $lang['bmi_formula_intro'] ?? 'BMI is calculated by dividing weight (in kilograms) by height squared (in meters):'; ?></p>
             
             <div class="bg-gray-100 p-4 rounded-lg text-center">
-                <strong>BMI = masa ciała (kg) / wzrost² (m²)</strong>
+                <strong><?php echo $lang['bmi_formula'] ?? 'BMI = weight (kg) / height² (m²)'; ?></strong>
             </div>
             
-            <p>Jednak należy pamiętać, że BMI ma pewne ograniczenia:</p>
+            <p><?php echo $lang['bmi_limitations_intro'] ?? 'However, it is important to remember that BMI has limitations:'; ?></p>
             
             <ul class="list-disc pl-6 space-y-2">
-                <li>Nie uwzględnia składu ciała (proporcji mięśni do tłuszczu)</li>
-                <li>Może dawać mylne wyniki u sportowców, kobiet w ciąży, osób starszych i dzieci</li>
-                <li>Nie bierze pod uwagę rozmieszczenia tkanki tłuszczowej w organizmie</li>
+                <li><?php echo $lang['bmi_limitation_1'] ?? 'Does not account for body composition (muscle vs fat)'; ?></li>
+                <li><?php echo $lang['bmi_limitation_2'] ?? 'May give misleading results for athletes, pregnant women, the elderly, and children'; ?></li>
+                <li><?php echo $lang['bmi_limitation_3'] ?? 'Does not consider fat distribution in the body'; ?></li>
             </ul>
             
-            <p>BMI jest dobrym punktem wyjścia do oceny masy ciała, ale w razie wątpliwości zawsze warto skonsultować się z lekarzem lub dietetykiem.</p>
+            <p><?php echo $lang['bmi_conclusion'] ?? 'BMI is a good starting point for assessing body weight, but in case of doubt always consult a doctor or dietitian.'; ?></p>
         </div>
     </div>
 </div>

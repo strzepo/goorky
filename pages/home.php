@@ -1,6 +1,6 @@
 <?php
 // Ustawienie tytułu i opisu strony
-$pageTitle = $lang['home_title'] ?? 'ToolsOnline - Free Online Tools';
+$pageTitle = $lang['home_title'] ?? 'Goorky.com - Free Online Tools';
 $pageDescription = $lang['home_description'] ?? 'Free online tools: BMI and calorie calculators, unit converters, password generators and video downloaders.';
 ?>
 

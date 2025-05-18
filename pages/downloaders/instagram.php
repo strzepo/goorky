@@ -1,53 +1,53 @@
 <?php
-// Ustawienie tytułu i opisu strony
-$pageTitle = 'Instagram Downloader - Pobieraj zdjęcia i filmy z Instagrama | ToolsOnline';
-$pageDescription = 'Darmowy Instagram Downloader - pobieraj zdjęcia i filmy z Instagrama w wysokiej jakości. Łatwy w użyciu, bez rejestracji i instalacji.';
+// Setting page title and description
+$pageTitle = $lang['instagram_page_title'] ?? 'Instagram Downloader - Download Photos and Videos from Instagram | Goorky.com';
+$pageDescription = $lang['instagram_page_description'] ?? 'Free Instagram Downloader - download photos and videos from Instagram in high quality. Easy to use, no registration or installation required.';
 
-// Inicjalizacja zmiennych
+// Initialize variables
 $url = '';
 $hasResult = false;
 $errorMessage = '';
 $mediaType = '';
 $mediaUrl = '';
 
-// Obsługa przesłanego formularza
+// Handle submitted form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])) {
-    // Pobranie i walidacja danych
+    // Get and validate data
     $url = sanitizeInput($_POST['url'] ?? '');
     
-    // Sprawdzenie czy URL jest poprawny
+    // Check if URL is valid
     if (filter_var($url, FILTER_VALIDATE_URL)) {
-        // Sprawdzanie czy to link do Instagrama
+        // Check if it's an Instagram link
         if (strpos($url, 'instagram.com') !== false) {
-            // Tutaj w rzeczywistej implementacji byłoby wywołanie API do pobierania treści
-            // Na potrzeby przykładu zakładamy, że wszystko działa poprawnie
+            // In a real implementation, we would call an API to fetch content
+            // For example purposes, we assume everything works correctly
             $hasResult = true;
             
-            // Losowo wybieramy typ mediów (w rzeczywistości byłoby to określone na podstawie URL)
+            // Randomly choose a media type (in reality, this would be determined based on the URL)
             $mediaType = rand(0, 1) ? 'image' : 'video';
         } else {
-            $errorMessage = 'Wprowadzony URL nie jest linkiem do Instagrama.';
+            $errorMessage = $lang['not_instagram_url'] ?? 'The URL provided is not an Instagram link.';
         }
     } else {
-        $errorMessage = 'Wprowadź poprawny adres URL postu na Instagramie.';
+        $errorMessage = $lang['enter_valid_instagram_url'] ?? 'Please enter a valid Instagram post URL.';
     }
 }
 ?>
 
 <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Instagram Downloader</h1>
+    <h1 class="text-3xl font-bold mb-6"><?php echo $lang['instagram_downloader'] ?? 'Instagram Downloader'; ?></h1>
     
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <p class="mb-4">Pobieraj zdjęcia i filmy z Instagrama za pomocą linku do postu. Wystarczy wkleić link i kliknąć "Pobierz".</p>
+        <p class="mb-4"><?php echo $lang['instagram_intro'] ?? 'Download photos and videos from Instagram using a post link. Just paste the link and click "Download".'; ?></p>
         
         <form method="POST" action="/instagram" class="space-y-6">
             <div>
-                <label for="url" class="block text-gray-700 font-medium mb-2">Link do postu na Instagramie</label>
+                <label for="url" class="block text-gray-700 font-medium mb-2"><?php echo $lang['instagram_post_link'] ?? 'Instagram Post Link'; ?></label>
                 <input type="url" name="url" id="url" value="<?php echo htmlspecialchars($url); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="https://www.instagram.com/p/...">
             </div>
             
             <div class="text-center">
-                <button type="submit" name="download_instagram" class="bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition">Pobierz</button>
+                <button type="submit" name="download_instagram" class="bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
             </div>
         </form>
         
@@ -60,14 +60,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])
     
     <?php if ($hasResult): ?>
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Znalezione media</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['found_media'] ?? 'Found Media'; ?></h2>
         
         <div class="flex flex-col md:flex-row mb-6">
             <div class="md:w-1/2 mb-4 md:mb-0 md:mr-6">
                 <div class="bg-gray-100 rounded-lg overflow-hidden">
                     <?php if ($mediaType === 'image'): ?>
                         <div class="aspect-w-1 aspect-h-1">
-                            <img src="/assets/images/instagram-placeholder.jpg" alt="Podgląd zdjęcia z Instagrama" class="w-full h-full object-cover">
+                            <img src="/assets/images/instagram-placeholder.jpg" alt="<?php echo $lang['instagram_image_preview'] ?? 'Instagram image preview'; ?>" class="w-full h-full object-cover">
                         </div>
                     <?php else: ?>
                         <div class="aspect-w-16 aspect-h-9">
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <p class="mt-2">Podgląd wideo</p>
+                                    <p class="mt-2"><?php echo $lang['video_preview'] ?? 'Video Preview'; ?></p>
                                 </div>
                             </div>
                         </div>
@@ -87,14 +87,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])
             
             <div class="md:w-1/2">
                 <div class="bg-yellow-50 p-4 rounded-lg text-yellow-800 mb-4">
-                    <strong>Uwaga:</strong> Ze względu na aktualizacje API Instagrama, bezpośrednie pobieranie zawartości może być ograniczone. Nasza usługa wykrywa URL, ale funkcjonalność pobierania może być niedostępna.
+                    <strong><?php echo $lang['note'] ?? 'Note:'; ?></strong> <?php echo $lang['instagram_api_limitations'] ?? 'Due to Instagram API updates, direct content downloading may be limited. Our service detects the URL, but downloading functionality may not be available.'; ?>
                 </div>
                 
-                <p class="mb-4">Pobieranie zawartości z Instagrama może naruszać warunki korzystania z serwisu. Zalecamy pobieranie tylko własnych treści lub treści, do których masz uprawnienia.</p>
+                <p class="mb-4"><?php echo $lang['instagram_terms_warning'] ?? 'Downloading content from Instagram may violate the terms of service. We recommend only downloading your own content or content you have permission to download.'; ?></p>
                 
                 <div class="mt-4">
                     <a href="#" class="bg-purple-600 text-white font-semibold px-6 py-2 rounded hover:bg-purple-700 transition inline-block disabled opacity-50 cursor-not-allowed">
-                        <?php echo $mediaType === 'image' ? 'Pobierz zdjęcie' : 'Pobierz wideo'; ?>
+                        <?php echo $mediaType === 'image' ? ($lang['download_image'] ?? 'Download Image') : ($lang['download_video'] ?? 'Download Video'); ?>
                     </a>
                 </div>
             </div>
@@ -102,66 +102,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])
     </div>
     <?php endif; ?>
     
-    <!-- Informacje o Instagram Downloader -->
+    <!-- About Instagram Downloader -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">O Instagram Downloader</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['about_instagram_downloader'] ?? 'About Instagram Downloader'; ?></h2>
         
         <div class="space-y-4">
-            <p>Instagram Downloader to narzędzie, które umożliwia zapisywanie zdjęć i filmów z Instagrama na urządzenie. Należy jednak pamiętać o kilku ważnych kwestiach:</p>
+            <p><?php echo $lang['instagram_downloader_desc'] ?? 'Instagram Downloader is a tool that allows you to save photos and videos from Instagram to your device. However, there are some important considerations to keep in mind:'; ?></p>
             
-            <h3 class="text-xl font-semibold mt-4">Ograniczenia API Instagrama</h3>
-            <p>Instagram regularnie aktualizuje swoje API i zabezpieczenia, co może wpływać na działanie narzędzi do pobierania zawartości. Z tego powodu nasza usługa może mieć ograniczoną funkcjonalność.</p>
+            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['instagram_api_limitations_title'] ?? 'Instagram API Limitations'; ?></h3>
+            <p><?php echo $lang['instagram_api_limitations_desc'] ?? 'Instagram regularly updates its API and security measures, which can affect the functionality of content downloading tools. As a result, our service may have limited functionality.'; ?></p>
             
-            <h3 class="text-xl font-semibold mt-4">Warunki korzystania z Instagrama</h3>
-            <p>Zgodnie z warunkami korzystania z Instagrama:</p>
+            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['instagram_terms_title'] ?? 'Instagram Terms of Service'; ?></h3>
+            <p><?php echo $lang['instagram_terms_quote_intro'] ?? 'According to Instagram\'s terms of service:'; ?></p>
             
             <div class="bg-gray-100 p-4 rounded-lg my-4">
-                <p>Nie możesz próbować uzyskać dostępu do treści bez wyraźnej zgody właściciela konta, a także nie możesz używać zautomatyzowanych środków do zbierania informacji.</p>
+                <p><?php echo $lang['instagram_terms_quote'] ?? 'You cannot attempt to access content without explicit permission from the account owner, and you cannot use automated means to collect information.'; ?></p>
             </div>
             
-            <h3 class="text-xl font-semibold mt-4">Legalne wykorzystanie</h3>
-            <p>Istnieją sytuacje, w których pobieranie zdjęć i filmów z Instagrama może być dozwolone:</p>
+            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['legal_use_title'] ?? 'Legal Use'; ?></h3>
+            <p><?php echo $lang['instagram_legal_use_desc'] ?? 'There are situations where downloading photos and videos from Instagram may be allowed:'; ?></p>
             <ul class="list-disc pl-6 space-y-2">
-                <li>Pobieranie własnych treści (które samodzielnie opublikowałeś)</li>
-                <li>Treści, do których otrzymałeś wyraźną zgodę od twórcy</li>
-                <li>Treści udostępnione na licencji pozwalającej na pobieranie</li>
+                <li><?php echo $lang['download_own_content'] ?? 'Downloading your own content (which you have published yourself)'; ?></li>
+                <li><?php echo $lang['download_with_permission'] ?? 'Content for which you have received explicit permission from the creator'; ?></li>
+                <li><?php echo $lang['download_licensed_content'] ?? 'Content shared under a license that allows downloading'; ?></li>
             </ul>
             
             <div class="bg-yellow-50 p-4 rounded-lg mt-4">
-                <p class="text-yellow-800"><strong>Uwaga:</strong> Zawsze szanuj prawa autorskie innych użytkowników Instagrama. Pobieranie i wykorzystywanie cudzych treści bez zgody może naruszać prawo autorskie.</p>
+                <p class="text-yellow-800"><strong><?php echo $lang['note'] ?? 'Note:'; ?></strong> <?php echo $lang['respect_instagram_copyright'] ?? 'Always respect the copyright of other Instagram users. Downloading and using others\' content without permission may violate copyright law.'; ?></p>
             </div>
         </div>
     </div>
     
-    <!-- Instrukcje -->
+    <!-- Instructions -->
     <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-semibold mb-4">Jak pobrać zdjęcie lub film z Instagrama</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['how_to_download_instagram'] ?? 'How to Download a Photo or Video from Instagram'; ?></h2>
         
         <div class="space-y-4">
             <ol class="list-decimal pl-6 space-y-4">
                 <li>
-                    <strong>Znajdź post na Instagramie</strong>
-                    <p class="mt-1">Otwórz aplikację Instagram lub stronę instagram.com i znajdź post, który chcesz pobrać.</p>
+                    <strong><?php echo $lang['find_post'] ?? 'Find the post on Instagram'; ?></strong>
+                    <p class="mt-1"><?php echo $lang['find_post_desc'] ?? 'Open the Instagram app or instagram.com and find the post you want to download.'; ?></p>
                 </li>
                 
                 <li>
-                    <strong>Skopiuj link do postu</strong>
-                    <p class="mt-1">W aplikacji mobilnej, naciśnij ikonę "..." i wybierz "Kopiuj link". W przeglądarce, skopiuj adres URL z paska adresu.</p>
+                    <strong><?php echo $lang['copy_post_link'] ?? 'Copy the post link'; ?></strong>
+                    <p class="mt-1"><?php echo $lang['copy_post_link_desc'] ?? 'In the mobile app, tap the "..." icon and select "Copy Link". In a browser, copy the URL from the address bar.'; ?></p>
                 </li>
                 
                 <li>
-                    <strong>Wklej link do naszego narzędzia</strong>
-                    <p class="mt-1">Wklej skopiowany link w pole powyżej i kliknij przycisk "Pobierz".</p>
+                    <strong><?php echo $lang['paste_link'] ?? 'Paste the link to our tool'; ?></strong>
+                    <p class="mt-1"><?php echo $lang['paste_link_desc'] ?? 'Paste the copied link in the field above and click the "Download" button.'; ?></p>
                 </li>
                 
                 <li>
-                    <strong>Pobierz plik</strong>
-                    <p class="mt-1">Po przetworzeniu linku, kliknij przycisk "Pobierz zdjęcie" lub "Pobierz wideo", aby zapisać plik na swoim urządzeniu.</p>
+                    <strong><?php echo $lang['download_file'] ?? 'Download the file'; ?></strong>
+                    <p class="mt-1"><?php echo $lang['download_file_desc'] ?? 'After processing the link, click the "Download Image" or "Download Video" button to save the file to your device.'; ?></p>
                 </li>
             </ol>
             
             <div class="bg-blue-50 p-4 rounded-lg mt-4">
-                <p class="text-blue-800"><strong>Wskazówka:</strong> Upewnij się, że link pochodzi z publicznie dostępnego konta na Instagramie. Narzędzie nie działa z prywatnymi kontami, do których nie masz dostępu.</p>
+                <p class="text-blue-800"><strong><?php echo $lang['tip'] ?? 'Tip:'; ?></strong> <?php echo $lang['public_account_tip'] ?? 'Make sure the link comes from a publicly accessible Instagram account. The tool won\'t work with private accounts you don\'t have access to.'; ?></p>
             </div>
         </div>
     </div>

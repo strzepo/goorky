@@ -1,7 +1,7 @@
 <?php
 // Ustawienie tytułu i opisu strony
-$pageTitle = 'Generator Haseł - Twórz bezpieczne, losowe hasła | ToolsOnline';
-$pageDescription = 'Darmowy generator haseł online - twórz bezpieczne, losowe hasła o wybranej długości i złożoności. Zwiększ bezpieczeństwo swoich kont internetowych.';
+$pageTitle = $lang['password_page_title'] ?? 'Password Generator - Create secure, random passwords | Goorky.com';
+$pageDescription = $lang['password_page_description'] ?? 'Free online password generator - create secure, random passwords with chosen length and complexity. Increase the security of your online accounts.';
 
 // Inicjalizacja zmiennych
 $length = 12;
@@ -66,28 +66,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_password']))
     
     // Kategorie siły hasła
     if ($strength <= 2) {
-        $passwordStrength = 'Słabe';
+        $passwordStrength = $lang['password_weak'] ?? 'Słabe';
         $strengthColor = 'text-red-600';
     } elseif ($strength <= 4) {
-        $passwordStrength = 'Średnie';
+        $passwordStrength = $lang['password_medium'] ?? 'Średnie';
         $strengthColor = 'text-yellow-600';
     } else {
-        $passwordStrength = 'Silne';
+        $passwordStrength = $lang['password_strong'] ?? 'Silne';
         $strengthColor = 'text-green-600';
     }
 }
 ?>
 
 <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold mb-6">Generator Haseł</h1>
+    <h1 class="text-3xl font-bold mb-6"><?php echo $lang['password_generator'] ?? 'Password Generator'; ?></h1>
     
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <p class="mb-4">Stwórz bezpieczne, losowe hasło dostosowane do Twoich wymagań. Wybierz długość hasła i rodzaje znaków, które mają być użyte.</p>
+        <p class="mb-4"><?php echo $lang['password_intro'] ?? 'Create a secure, random password tailored to your preferences. Choose the length and character types to include.'; ?></p>
         
         <form method="POST" action="/password-generator" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <label for="length" class="block text-gray-700 font-medium mb-2">Długość hasła</label>
+                    <label for="length" class="block text-gray-700 font-medium mb-2"><?php echo $lang['password_length'] ?? 'Password length'; ?></label>
                     <div class="flex items-center">
                         <input type="range" name="length" id="length" min="4" max="64" value="<?php echo htmlspecialchars($length); ?>" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer" oninput="document.getElementById('lengthValue').textContent = this.value">
                         <span id="lengthValue" class="ml-4 w-10 text-center font-medium"><?php echo htmlspecialchars($length); ?></span>
@@ -95,42 +95,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_password']))
                 </div>
                 
                 <div>
-                    <label class="block text-gray-700 font-medium mb-2">Opcje</label>
+                    <label class="block text-gray-700 font-medium mb-2"><?php echo $lang['options'] ?? 'Options'; ?></label>
                     <div class="space-y-2">
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="use_upper" <?php echo $useUpper ? 'checked' : ''; ?> class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2">Wielkie litery (A-Z)</span>
+                            <span class="ml-2"><?php echo $lang['uppercase_letters'] ?? 'Uppercase letters (A-Z)'; ?></span>
                         </label>
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="use_lower" <?php echo $useLower ? 'checked' : ''; ?> class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2">Małe litery (a-z)</span>
+                            <span class="ml-2"><?php echo $lang['lowercase_letters'] ?? 'Lowercase letters (a-z)'; ?></span>
                         </label>
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="use_numbers" <?php echo $useNumbers ? 'checked' : ''; ?> class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2">Cyfry (0-9)</span>
+                            <span class="ml-2"><?php echo $lang['numbers'] ?? 'Numbers (0-9)'; ?></span>
                         </label>
                         <label class="inline-flex items-center">
                             <input type="checkbox" name="use_special" <?php echo $useSpecial ? 'checked' : ''; ?> class="h-4 w-4 text-blue-600 focus:ring-blue-500">
-                            <span class="ml-2">Znaki specjalne (!@#$%^&*()_-+=<>?)</span>
+                            <span class="ml-2"><?php echo $lang['special_chars'] ?? 'Special characters (!@#$%^&*()_-+=<>?)'; ?></span>
                         </label>
                     </div>
                 </div>
             </div>
             
             <div class="text-center">
-                <button type="submit" name="generate_password" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition">Generuj hasło</button>
+                <button type="submit" name="generate_password" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['generate_password'] ?? 'Generate password'; ?></button>
             </div>
         </form>
     </div>
     
     <?php if ($hasResult): ?>
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Wygenerowane hasło</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['generated_password'] ?? 'Generated password'; ?></h2>
         
         <div class="flex flex-col items-center mb-6">
             <div class="w-full bg-gray-100 p-4 rounded-lg text-center relative mb-4">
                 <code id="password" class="text-2xl font-mono break-all"><?php echo htmlspecialchars($password); ?></code>
-                <button onclick="copyPassword()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition" title="Kopiuj do schowka">
+                <button onclick="copyPassword()" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 transition" title="<?php echo $lang['copy_to_clipboard'] ?? 'Copy to clipboard'; ?>">
                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
                     </svg>
@@ -138,18 +138,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_password']))
             </div>
             
             <div class="text-lg <?php echo $strengthColor; ?>">
-                Siła hasła: <strong><?php echo $passwordStrength; ?></strong>
+                <?php echo $lang['password_strength'] ?? 'Password strength:'; ?> <strong><?php echo $passwordStrength; ?></strong>
             </div>
         </div>
         
         <div class="bg-gray-100 p-4 rounded-lg">
-            <h3 class="font-semibold mb-2">Szczegóły hasła:</h3>
+            <h3 class="font-semibold mb-2"><?php echo $lang['password_details'] ?? 'Password details:'; ?></h3>
             <ul class="space-y-1">
-                <li><strong>Długość:</strong> <?php echo strlen($password); ?> znaków</li>
-                <li><strong>Zawiera wielkie litery:</strong> <?php echo preg_match('/[A-Z]/', $password) ? 'Tak' : 'Nie'; ?></li>
-                <li><strong>Zawiera małe litery:</strong> <?php echo preg_match('/[a-z]/', $password) ? 'Tak' : 'Nie'; ?></li>
-                <li><strong>Zawiera cyfry:</strong> <?php echo preg_match('/[0-9]/', $password) ? 'Tak' : 'Nie'; ?></li>
-                <li><strong>Zawiera znaki specjalne:</strong> <?php echo preg_match('/[^a-zA-Z0-9]/', $password) ? 'Tak' : 'Nie'; ?></li>
+                <li><strong><?php echo $lang['length'] ?? 'Length:'; ?></strong> <?php echo strlen($password); ?> <?php echo $lang['characters'] ?? 'characters'; ?></li>
+                <li><strong><?php echo $lang['contains_uppercase'] ?? 'Contains uppercase letters:'; ?></strong> <?php echo preg_match('/[A-Z]/', $password) ? ($lang['yes'] ?? 'Yes') : ($lang['no'] ?? 'No'); ?></li>
+                <li><strong><?php echo $lang['contains_lowercase'] ?? 'Contains lowercase letters:'; ?></strong> <?php echo preg_match('/[a-z]/', $password) ? ($lang['yes'] ?? 'Yes') : ($lang['no'] ?? 'No'); ?></li>
+                <li><strong><?php echo $lang['contains_numbers'] ?? 'Contains numbers:'; ?></strong> <?php echo preg_match('/[0-9]/', $password) ? ($lang['yes'] ?? 'Yes') : ($lang['no'] ?? 'No'); ?></li>
+                <li><strong><?php echo $lang['contains_special'] ?? 'Contains special characters:'; ?></strong> <?php echo preg_match('/[^a-zA-Z0-9]/', $password) ? ($lang['yes'] ?? 'Yes') : ($lang['no'] ?? 'No'); ?></li>
             </ul>
         </div>
     </div>
@@ -157,53 +157,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_password']))
     
     <!-- Informacje o hasłach -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Jak stworzyć silne hasło?</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['how_to_create_strong_password'] ?? 'How to create a strong password?'; ?></h2>
         
         <div class="space-y-4">
-            <p>Silne hasło jest kluczowym elementem zabezpieczenia Twoich kont online. Oto kilka wskazówek dotyczących tworzenia bezpiecznych haseł:</p>
+            <p><?php echo $lang['strong_password_intro'] ?? 'A strong password is key to securing your online accounts. Here are some tips for creating safe passwords:'; ?></p>
             
             <ul class="list-disc pl-6 space-y-2">
-                <li><strong>Używaj długich haseł</strong> - hasło powinno mieć co najmniej 12 znaków. Im dłuższe, tym lepsze.</li>
-                <li><strong>Różnorodność znaków</strong> - używaj kombinacji wielkich i małych liter, cyfr oraz znaków specjalnych.</li>
-                <li><strong>Unikaj przewidywalnych wzorców</strong> - nie używaj sekwencji typu "123456" czy "qwerty".</li>
-                <li><strong>Unikaj osobistych informacji</strong> - nie używaj imion, dat urodzenia, numerów telefonów, które są łatwe do odgadnięcia.</li>
-                <li><strong>Używaj różnych haseł</strong> - każde konto powinno mieć unikalne hasło.</li>
-                <li><strong>Regularnie zmieniaj hasła</strong> - zwłaszcza te do ważnych kont.</li>
+                <li><strong><?php echo $lang['use_long_passwords'] ?? 'Use long passwords'; ?></strong> - <?php echo $lang['long_passwords_desc'] ?? 'The password should be at least 12 characters long. The longer, the better.'; ?></li>
+                <li><strong><?php echo $lang['use_variety'] ?? 'Character variety'; ?></strong> - <?php echo $lang['variety_desc'] ?? 'Use a mix of uppercase and lowercase letters, numbers, and special characters.'; ?></li>
+                <li><strong><?php echo $lang['avoid_patterns'] ?? 'Avoid predictable patterns'; ?></strong> - <?php echo $lang['patterns_desc'] ?? 'Don\'t use sequences like "123456" or "qwerty".'; ?></li>
+                <li><strong><?php echo $lang['avoid_personal_info'] ?? 'Avoid personal information'; ?></strong> - <?php echo $lang['personal_info_desc'] ?? 'Avoid using names, birthdates, or phone numbers that are easy to guess.'; ?></li>
+                <li><strong><?php echo $lang['use_different_passwords'] ?? 'Use different passwords'; ?></strong> - <?php echo $lang['different_passwords_desc'] ?? 'Each account should have a unique password.'; ?></li>
+                <li><strong><?php echo $lang['change_regularly'] ?? 'Change passwords regularly'; ?></strong> - <?php echo $lang['change_regularly_desc'] ?? 'especially for important accounts.'; ?></li>
             </ul>
             
             <div class="bg-yellow-50 p-4 rounded-lg mt-4">
-                <p class="text-yellow-800"><strong>Uwaga:</strong> Nie zapisuj haseł w niezabezpieczonych miejscach. Rozważ użycie menedżera haseł, który bezpiecznie przechowa wszystkie Twoje hasła.</p>
+                <p class="text-yellow-800"><strong><?php echo $lang['note'] ?? 'Note:'; ?></strong> <?php echo $lang['password_storage_warning'] ?? 'Do not store passwords in unsecured places. Consider using a password manager to securely store them.'; ?></p>
             </div>
         </div>
     </div>
     
     <!-- Dodatkowe informacje -->
     <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-semibold mb-4">Dlaczego bezpieczne hasła są ważne?</h2>
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['why_secure_passwords_matter'] ?? 'Why are secure passwords important?'; ?></h2>
         
         <div class="space-y-4">
-            <p>Bezpieczne hasła stanowią pierwszą linię obrony przed nieautoryzowanym dostępem do Twoich kont online. Oto dlaczego są tak ważne:</p>
+            <p><?php echo $lang['secure_passwords_intro'] ?? 'Strong passwords are the first line of defense against unauthorized access to your online accounts. Here\'s why they\'re important:'; ?></p>
             
-            <h3 class="text-xl font-semibold mt-4">Ochrona przed atakami</h3>
-            <p>Hakerzy używają różnych metod, aby złamać hasła:</p>
+            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['protection_against_attacks'] ?? 'Protection against attacks'; ?></h3>
+            <p><?php echo $lang['hackers_methods'] ?? 'Hackers use different methods to crack passwords:'; ?></p>
             
             <ul class="list-disc pl-6 space-y-2">
-                <li><strong>Atak słownikowy</strong> - wypróbowywanie popularnych słów i fraz</li>
-                <li><strong>Atak typu brute force</strong> - systematyczne wypróbowywanie wszystkich możliwych kombinacji znaków</li>
-                <li><strong>Phishing</strong> - podszywanie się pod zaufane źródła, aby wyłudzić hasła</li>
+                <li><strong><?php echo $lang['dictionary_attack'] ?? 'Dictionary attack'; ?></strong> - <?php echo $lang['dictionary_attack_desc'] ?? 'trying popular words and phrases'; ?></li>
+                <li><strong><?php echo $lang['brute_force'] ?? 'Brute force attack'; ?></strong> - <?php echo $lang['brute_force_desc'] ?? 'systematically trying all possible combinations'; ?></li>
+                <li><strong><?php echo $lang['phishing'] ?? 'Phishing'; ?></strong> - <?php echo $lang['phishing_desc'] ?? 'posing as trusted sources to steal passwords'; ?></li>
             </ul>
             
-            <p>Im silniejsze hasło, tym trudniej je złamać za pomocą tych metod.</p>
+            <p><?php echo $lang['stronger_password_better'] ?? 'The stronger the password, the harder it is to crack using these methods.'; ?></p>
             
-            <h3 class="text-xl font-semibold mt-4">Czas potrzebny do złamania hasła</h3>
-            <p>Długość i złożoność hasła bezpośrednio wpływają na czas potrzebny do jego złamania:</p>
+            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['time_to_crack'] ?? 'Time required to crack a password'; ?></h3>
+            <p><?php echo $lang['password_complexity_impact'] ?? 'Password length and complexity directly affect the time needed to crack it:'; ?></p>
             
             <ul class="list-disc pl-6 space-y-2">
-                <li>Hasło 6 znaków, tylko małe litery: kilka sekund</li>
-                <li>Hasło 8 znaków, małe i wielkie litery: kilka godzin</li>
-                <li>Hasło 10 znaków, małe, wielkie litery i cyfry: kilka dni</li>
-                <li>Hasło 12 znaków, małe, wielkie litery, cyfry i znaki specjalne: kilka lat</li>
-                <li>Hasło 16 znaków, małe, wielkie litery, cyfry i znaki specjalne: miliony lat</li>
+                <li><?php echo $lang['crack_time_1'] ?? '6-character password, only lowercase letters: a few seconds'; ?></li>
+                <li><?php echo $lang['crack_time_2'] ?? '8-character password, lowercase and uppercase: a few hours'; ?></li>
+                <li><?php echo $lang['crack_time_3'] ?? '10-character password, lowercase, uppercase and numbers: a few days'; ?></li>
+                <li><?php echo $lang['crack_time_4'] ?? '12-character password, lowercase, uppercase, numbers and symbols: several years'; ?></li>
+                <li><?php echo $lang['crack_time_5'] ?? '16-character password, lowercase, uppercase, numbers and symbols: millions of years'; ?></li>
             </ul>
         </div>
     </div>
@@ -227,6 +227,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_password']))
         document.body.removeChild(textArea);
         
         // Informacja o skopiowaniu
-        alert('Hasło zostało skopiowane do schowka!');
+        alert('<?php echo $lang['password_copied'] ?? 'Password has been copied to clipboard!'; ?>');
     }
 </script>

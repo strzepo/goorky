@@ -1,7 +1,7 @@
 <?php
 /**
  * Plik zawierający wszystkie funkcje pomocnicze aplikacji
- * @author ToolsOnline
+ * @author Goorky.com
  * @version 1.0
  */
 
@@ -78,20 +78,20 @@ function getBMICategory($bmi) {
  * @return float Dzienne zapotrzebowanie kaloryczne
  */
 function calculateCalories($weight, $height, $age, $gender, $activity) {
-    // Wzór Mifflin-St Jeor
+    // Mifflin-St Jeor formula
     if ($gender === 'male') {
         $bmr = 10 * $weight + 6.25 * $height - 5 * $age + 5;
     } else {
         $bmr = 10 * $weight + 6.25 * $height - 5 * $age - 161;
     }
     
-    // Mnożniki aktywności
+    // Activity multipliers
     $activityFactors = [
-        'sedentary' => 1.2,      // Siedzący tryb życia, brak aktywności fizycznej
-        'light' => 1.375,         // Lekka aktywność (1-3 razy w tygodniu)
-        'moderate' => 1.55,       // Umiarkowana aktywność (3-5 razy w tygodniu)
-        'active' => 1.725,        // Duża aktywność (6-7 razy w tygodniu)
-        'very_active' => 1.9      // Bardzo duża aktywność (2 razy dziennie)
+        'sedentary' => 1.2,      // Sedentary lifestyle, no physical activity
+        'light' => 1.375,        // Light activity (1–3 times/week)
+        'moderate' => 1.55,      // Moderate activity (3–5 times/week)
+        'active' => 1.725,       // High activity (6–7 times/week)
+        'very_active' => 1.9     // Very high activity (twice daily)
     ];
     
     return $bmr * $activityFactors[$activity];
@@ -106,7 +106,7 @@ function calculateCalories($weight, $height, $age, $gender, $activity) {
  * @return float Wartość po konwersji
  */
 function convertUnits($value, $from, $to, $type) {
-    // Współczynniki konwersji do jednostki bazowej
+    // Conversion factors to base units
     $conversionFactors = [
         'length' => [
             'mm' => 0.001,
@@ -133,7 +133,7 @@ function convertUnits($value, $from, $to, $type) {
         ]
     ];
     
-    // Funkcje specjalne dla temperatury
+    // Special functions for temperature
     if ($type === 'temperature') {
         if ($from === 'C' && $to === 'F') {
             return ($value * 9/5) + 32;
@@ -148,15 +148,15 @@ function convertUnits($value, $from, $to, $type) {
         } elseif ($from === 'K' && $to === 'F') {
             return ($value - 273.15) * 9/5 + 32;
         } else {
-            return $value; // Ta sama jednostka
+            return $value; // Same unit
         }
     }
     
-    // Standardowa konwersja dla długości i wagi
-    // Konwersja do jednostki bazowej
+    // Standard conversion for length and weight
+    // Convert to base unit
     $baseValue = $value * $conversionFactors[$type][$from];
     
-    // Konwersja z jednostki bazowej do docelowej
+    // Convert from base unit to target unit
     return $baseValue / $conversionFactors[$type][$to];
 }
 
@@ -174,7 +174,7 @@ function calculateDateDifference($date1, $date2) {
 }
 
 /**
- * Generuje bezpieczne hasło
+ * Generates a secure password
  * @param int $length Długość hasła
  * @param bool $useSpecial Czy używać znaków specjalnych
  * @param bool $useNumbers Czy używać cyfr
@@ -201,7 +201,7 @@ function generatePassword($length, $useSpecial, $useNumbers, $useUpper, $useLowe
         $chars .= 'abcdefghijklmnopqrstuvwxyz';
     }
     
-    // Jeśli żadna opcja nie została wybrana, użyj wszystkich
+    // If no option was selected, use all
     if (empty($chars)) {
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-+=<>?';
     }
@@ -217,7 +217,7 @@ function generatePassword($length, $useSpecial, $useNumbers, $useUpper, $useLowe
 }
 
 /**
- * Formatuje datę na przyjazną dla człowieka
+ * Formats a date in a human-friendly way
  * @param string $date Data w formacie Y-m-d
  * @return string Sformatowana data
  */
@@ -227,7 +227,7 @@ function formatFriendlyDate($date) {
 }
 
 /**
- * Zwraca aktywną klasę CSS dla bieżącej strony
+ * Returns the CSS class for the active page
  * @param string $pageName Nazwa strony do porównania
  * @return string Klasa CSS 'active' lub pusta
  */
@@ -248,7 +248,7 @@ function isActivePage($pageName) {
 }
 
 /**
- * Parsuje URL wideo YouTube i wyodrębnia ID
+ * Parses a video URL and extracts its ID
  * @param string $url URL wideo YouTube
  * @return string|false ID wideo lub false w przypadku niepowodzenia
  */
@@ -263,7 +263,7 @@ function getYoutubeId($url) {
 }
 
 /**
- * Parsuje URL wideo Facebook i wyodrębnia ID
+ * Parses a video URL and extracts its ID
  * @param string $url URL wideo Facebook
  * @return string|false ID wideo lub false w przypadku niepowodzenia
  */
@@ -276,7 +276,7 @@ function getFacebookVideoId($url) {
 }
 
 /**
- * Parsuje URL wideo Vimeo i wyodrębnia ID
+ * Parses a video URL and extracts its ID
  * @param string $url URL wideo Vimeo
  * @return string|false ID wideo lub false w przypadku niepowodzenia
  */
@@ -289,7 +289,7 @@ function getVimeoId($url) {
 }
 
 /**
- * Pobiera metadane wideo Vimeo za pomocą API
+ * Retrieves Vimeo video metadata via API
  * @param string $id ID wideo Vimeo
  * @return array|false Dane wideo lub false w przypadku niepowodzenia
  */
@@ -313,20 +313,20 @@ function getVimeoMetadata($id) {
 }
 
 /**
- * Pobiera miniatury z Instagrama (uproszczona implementacja)
+ * Retrieves thumbnails from Instagram (simplified implementation)
  * @param string $url URL Instagram
  * @return string|false URL miniatury lub false w przypadku niepowodzenia
  */
 function getInstagramMedia($url) {
-    // W rzeczywistości używalibyśmy tutaj oficjalnego API Instagrama
-    // Ta funkcja jest uproszczona na potrzeby projektu
+    // In reality, the official Instagram API would be used
+    // This function is simplified for this project
     
     // Zwracamy false, implementacja będzie wymagała integracji z API Instagrama
     return false;
 }
 
 /**
- * Generuje znaczniki SEO dla strony
+ * Generates SEO meta tags for a page
  * @param string $title Tytuł strony
  * @param string $description Opis strony
  * @return string Znaczniki meta HTML

@@ -1,4 +1,13 @@
 <?php
+// Language handling mechanism
+session_start();
+
+// Default language
+$default_lang = 'en';
+
+// Available languages
+$available_languages = ['pl', 'en'];
+
 // Set default language to English if not set
 if (!isset($_SESSION['language'])) {
     $_SESSION['language'] = 'en';

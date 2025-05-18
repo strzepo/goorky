@@ -5,6 +5,10 @@
  * @version 1.0
  */
 
+// Włączenie pełnego logowania błędów
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 // Konfiguracja
 define('BASE_PATH', __DIR__);
 define('INCLUDE_PATH', BASE_PATH . '/includes');
@@ -13,11 +17,21 @@ define('PAGES_PATH', BASE_PATH . '/pages');
 // Dołączenie pliku z funkcjami
 require_once INCLUDE_PATH . '/functions.php';
 
+// Popraw adres URL jeśli zawiera index.php
+if (strpos($_SERVER['REQUEST_URI'], 'index.php') !== false) {
+    $redirectUrl = str_replace('index.php', '', $_SERVER['REQUEST_URI']);
+    header('Location: ' . $redirectUrl);
+    exit;
+}
+
 // Pobieranie nazwy strony z URL
 $page = isset($_GET['page']) ? sanitizeInput($_GET['page']) : 'home';
 
 // Zabezpieczenie przed atakami typu path traversal
 $page = str_replace(['..', '/', '\\'], '', $page);
+
+// Debugowanie - można później usunąć
+error_log("Ładowana strona: " . $page);
 
 // Domyślny tytuł i opis strony
 $pageTitle = 'Narzędzia Online - Kalkulatory, Konwertery i Downloadery';

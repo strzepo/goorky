@@ -25,13 +25,27 @@ if (isset($_GET['lang']) && in_array($_GET['lang'], ['en', 'pl'])) {
 
 // Load language file
 $lang = [];
-$langFile = __DIR__ . '/lang/' . $_SESSION['language'] . '.php';
+$language = $_SESSION['language'] ?? 'en';
+$langFile = __DIR__ . '/lang/' . $language . '.php';
 
 if (file_exists($langFile)) {
     require_once $langFile;
 } else {
     // Fallback to English
-    require_once __DIR__ . '/lang/en.php';
+    $enFile = __DIR__ . '/lang/en.php';
+    if (file_exists($enFile)) {
+        require_once $enFile;
+    } else {
+        // Minimalne tłumaczenia, jeśli nie ma plików językowych
+        $lang = [
+            'current_language' => 'English',
+            'language_code' => 'en',
+            'menu_home' => 'Home',
+            'footer_rights' => 'All rights reserved.',
+            'ad_placeholder' => 'Advertisement space'
+        ];
+        error_log("Uwaga: Brak plików językowych. Proszę utworzyć pliki w katalogu includes/lang/");
+    }
 }
 
 // Language Switcher Function
@@ -40,7 +54,7 @@ function languageSwitcher() {
     
     // Get site settings
     $settings = getSiteSettings();
-    $currentLang = $_SESSION['language'];
+    $currentLang = $_SESSION['language'] ?? 'en';
     $currentUrl = strtok($_SERVER['REQUEST_URI'], '?');
     
     $html = '<div class="relative inline-block text-left">';
@@ -69,13 +83,14 @@ function getSiteSettings() {
     
     if ($settings === null) {
         try {
-            require_once __DIR__ . '/db.php';
             global $pdo;
-            
-            $stmt = $pdo->query("SELECT setting_key, setting_value FROM settings");
-            $settingsData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-            
-            $settings = $settingsData;
+            if (isset($pdo)) {
+                $stmt = $pdo->query("SELECT setting_key, setting_value FROM settings");
+                $settingsData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+                $settings = $settingsData;
+            } else {
+                $settings = [];
+            }
         } catch (Exception $e) {
             $settings = [];
         }

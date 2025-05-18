@@ -1,3 +1,12 @@
+<?php
+// Sprawdź czy zmienna $pdo już istnieje, jeśli nie - zaimportuj plik db.php
+if (!isset($pdo)) {
+    require_once __DIR__ . '/db.php';
+}
+// Załaduj plik z funkcjami językowymi
+require_once __DIR__ . '/language.php';
+
+?>
 <!DOCTYPE html>
 <html lang="<?php echo $_SESSION['language'] ?? 'en'; ?>">
 <head>
@@ -6,12 +15,15 @@
     <?php
     // Get site settings for SEO
     $settings = [];
-    try {
+try {
+    if (isset($pdo)) {
         $stmt = $pdo->query("SELECT setting_key, setting_value FROM settings");
         $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    } catch (Exception $e) {
-        // Silently fail if settings table doesn't exist yet
     }
+} catch (Exception $e) {
+    // Silently fail if settings table doesn't exist yet
+    error_log("Błąd przy pobieraniu ustawień: " . $e->getMessage());
+}
     
     // Use settings for SEO if available, otherwise use defaults
     $meta_title = $settings['meta_title'] ?? $pageTitle;
@@ -46,6 +58,11 @@
     echo "<meta name=\"twitter:card\" content=\"summary\">\n";
     echo "<meta name=\"twitter:title\" content=\"" . htmlspecialchars($meta_title) . "\">\n";
     echo "<meta name=\"twitter:description\" content=\"" . htmlspecialchars($meta_description) . "\">\n";
+    
+
+    // Canonical URL
+    $canonicalUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    echo "<link rel=\"canonical\" href=\"" . htmlspecialchars($canonicalUrl) . "\">\n";   
     ?>
     
     <!-- TailwindCSS -->
@@ -132,14 +149,14 @@
                         <!-- Language switch -->
                         <?php echo languageSwitcher(); ?>
                         
-                        <!-- Login link - only show if registration is enabled -->
-                        <?php if (!isset($settings['enable_registration']) || $settings['enable_registration'] == '1'): ?>
-                        <a href="/admin/login.php" title="<?php echo $lang['login'] ?? 'Login'; ?>" class="text-gray-600 hover:text-blue-600">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                        </a>
-                        <?php endif; ?>
+<!-- Login link - only show if registration is enabled -->
+<?php if (($settings['enable_registration'] ?? '1') == '1'): ?>
+<a href="/admin/login.php" title="<?php echo $lang['login'] ?? 'Login'; ?>" class="text-gray-600 hover:text-blue-600">
+    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+    </svg>
+</a>
+<?php endif; ?>
                     </div>
                 </nav>
             </div>

@@ -1,25 +1,25 @@
 <?php
 // Ustawienie tytułu i opisu strony
-$pageTitle = 'ToolsOnline - Darmowe narzędzia online | Kalkulatory, Konwertery i Downloadery';
-$pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwertery jednostek, generatory haseł oraz downloadery wideo z YouTube, Instagram, Facebook i Vimeo.';
+$pageTitle = $lang['home_title'] ?? 'ToolsOnline - Free Online Tools';
+$pageDescription = $lang['home_description'] ?? 'Free online tools: BMI and calorie calculators, unit converters, password generators and video downloaders.';
 ?>
 
 <!-- Hero sekcja -->
 <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16 rounded-lg shadow-lg mb-12">
     <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">Darmowe narzędzia online</h1>
-        <p class="text-xl md:text-2xl mb-8">Kalkulatory, konwertery i downloadery wideo - wszystko w jednym miejscu!</p>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4"><?php echo $lang['home_hero_title'] ?? 'Free Online Tools'; ?></h1>
+        <p class="text-xl md:text-2xl mb-8"><?php echo $lang['home_hero_subtitle'] ?? 'Calculators, converters and video downloaders - all in one place!'; ?></p>
         <div class="flex flex-wrap justify-center gap-4">
-            <a href="/bmi" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">Kalkulator BMI</a>
-            <a href="/password-generator" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">Generator haseł</a>
-            <a href="/youtube" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">YouTube Downloader</a>
+            <a href="/bmi" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition"><?php echo $lang['menu_bmi'] ?? 'BMI Calculator'; ?></a>
+            <a href="/password-generator" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition"><?php echo $lang['menu_password'] ?? 'Password Generator'; ?></a>
+            <a href="/youtube" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition"><?php echo $lang['menu_youtube'] ?? 'YouTube Downloader'; ?></a>
         </div>
     </div>
 </div>
 
 <!-- Popularne kalkulatory -->
 <div class="mb-12">
-    <h2 class="text-3xl font-bold mb-6 text-center">Popularne kalkulatory</h2>
+    <h2 class="text-3xl font-bold mb-6 text-center"><?php echo $lang['home_popular_calculators'] ?? 'Popular Calculators'; ?></h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- Kalkulator BMI -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
@@ -29,9 +29,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Kalkulator BMI</h3>
-                <p class="text-gray-600 mb-4">Oblicz swój wskaźnik masy ciała i sprawdź, czy masz prawidłową wagę.</p>
-                <a href="/bmi" class="block text-center bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_bmi'] ?? 'BMI Calculator'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['bmi_short_desc'] ?? 'Calculate your Body Mass Index and check if your weight is normal.'; ?></p>
+                <a href="/bmi" class="block text-center bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
         
@@ -43,9 +43,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Kalkulator kalorii</h3>
-                <p class="text-gray-600 mb-4">Sprawdź swoje dzienne zapotrzebowanie kaloryczne zależnie od aktywności.</p>
-                <a href="/calories" class="block text-center bg-green-600 text-white font-medium px-4 py-2 rounded hover:bg-green-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_calories'] ?? 'Calorie Calculator'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['calories_short_desc'] ?? 'Check your daily caloric needs based on your activity level.'; ?></p>
+                <a href="/calories" class="block text-center bg-green-600 text-white font-medium px-4 py-2 rounded hover:bg-green-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
         
@@ -57,9 +57,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Konwerter jednostek</h3>
-                <p class="text-gray-600 mb-4">Konwertuj różne jednostki miary: długość, wagę i temperaturę.</p>
-                <a href="/units" class="block text-center bg-yellow-600 text-white font-medium px-4 py-2 rounded hover:bg-yellow-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_units'] ?? 'Unit Converter'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['units_short_desc'] ?? 'Convert different units: length, weight, and temperature.'; ?></p>
+                <a href="/units" class="block text-center bg-yellow-600 text-white font-medium px-4 py-2 rounded hover:bg-yellow-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
         
@@ -71,9 +71,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Kalkulator dat</h3>
-                <p class="text-gray-600 mb-4">Oblicz różnicę między dwiema datami lub dodaj/odejmij dni.</p>
-                <a href="/dates" class="block text-center bg-red-600 text-white font-medium px-4 py-2 rounded hover:bg-red-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_dates'] ?? 'Date Calculator'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['dates_short_desc'] ?? 'Calculate the difference between dates or add/subtract days.'; ?></p>
+                <a href="/dates" class="block text-center bg-red-600 text-white font-medium px-4 py-2 rounded hover:bg-red-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
     </div>
@@ -81,7 +81,7 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
 
 <!-- Downloadery wideo -->
 <div class="mb-12">
-    <h2 class="text-3xl font-bold mb-6 text-center">Downloadery wideo</h2>
+    <h2 class="text-3xl font-bold mb-6 text-center"><?php echo $lang['home_video_downloaders'] ?? 'Video Downloaders'; ?></h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <!-- YouTube Downloader -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition">
@@ -91,9 +91,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">YouTube Downloader</h3>
-                <p class="text-gray-600 mb-4">Pobieraj ulubione filmy z YouTube w wysokiej jakości.</p>
-                <a href="/youtube" class="block text-center bg-red-600 text-white font-medium px-4 py-2 rounded hover:bg-red-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_youtube'] ?? 'YouTube Downloader'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['youtube_short_desc'] ?? 'Download your favorite YouTube videos in high quality.'; ?></p>
+                <a href="/youtube" class="block text-center bg-red-600 text-white font-medium px-4 py-2 rounded hover:bg-red-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
         
@@ -105,9 +105,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Instagram Downloader</h3>
-                <p class="text-gray-600 mb-4">Pobierz zdjęcia i filmy z Instagrama za pomocą linku.</p>
-                <a href="/instagram" class="block text-center bg-purple-600 text-white font-medium px-4 py-2 rounded hover:bg-purple-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_instagram'] ?? 'Instagram Downloader'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['instagram_short_desc'] ?? 'Download photos and videos from Instagram with a link.'; ?></p>
+                <a href="/instagram" class="block text-center bg-purple-600 text-white font-medium px-4 py-2 rounded hover:bg-purple-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
         
@@ -119,9 +119,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Facebook Downloader</h3>
-                <p class="text-gray-600 mb-4">Pobieraj publiczne filmy z Facebooka w najwyższej jakości.</p>
-                <a href="/facebook" class="block text-center bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_facebook'] ?? 'Facebook Downloader'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['facebook_short_desc'] ?? 'Download public videos from Facebook in highest quality.'; ?></p>
+                <a href="/facebook" class="block text-center bg-blue-600 text-white font-medium px-4 py-2 rounded hover:bg-blue-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
         
@@ -133,9 +133,9 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
                 </svg>
             </div>
             <div class="p-6">
-                <h3 class="text-xl font-semibold mb-2">Vimeo Downloader</h3>
-                <p class="text-gray-600 mb-4">Pobieraj filmy z Vimeo w wysokiej rozdzielczości za darmo.</p>
-                <a href="/vimeo" class="block text-center bg-indigo-600 text-white font-medium px-4 py-2 rounded hover:bg-indigo-700 transition">Sprawdź teraz</a>
+                <h3 class="text-xl font-semibold mb-2"><?php echo $lang['menu_vimeo'] ?? 'Vimeo Downloader'; ?></h3>
+                <p class="text-gray-600 mb-4"><?php echo $lang['vimeo_short_desc'] ?? 'Download videos from Vimeo in high resolution for free.'; ?></p>
+                <a href="/vimeo" class="block text-center bg-indigo-600 text-white font-medium px-4 py-2 rounded hover:bg-indigo-700 transition"><?php echo $lang['check_now'] ?? 'Check now'; ?></a>
             </div>
         </div>
     </div>
@@ -143,72 +143,72 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
 
 <!-- Informacje o stronie -->
 <div class="bg-gray-100 rounded-lg p-8 mb-12">
-    <h2 class="text-3xl font-bold mb-4">O naszych narzędziach</h2>
+    <h2 class="text-3xl font-bold mb-4"><?php echo $lang['home_about_title'] ?? 'About Our Tools'; ?></h2>
     <div class="space-y-4">
-        <p>ToolsOnline to zestaw darmowych narzędzi internetowych, które pomagają w codziennych zadaniach. Nasza strona oferuje kalkulatory, konwertery i downloadery wideo - wszystko w jednym miejscu i całkowicie za darmo.</p>
+        <p><?php echo $lang['home_about_description'] ?? 'ToolsOnline is a set of free online tools to help with everyday tasks. Our site offers calculators, converters and video downloaders - all in one place and completely free.'; ?></p>
         
-        <p>Wszystkie nasze narzędzia są:</p>
+        <p><?php echo $lang['home_all_tools_are'] ?? 'All our tools are:'; ?></p>
         <ul class="list-disc pl-6 space-y-2">
-            <li><strong>Szybkie i wydajne</strong> - działają natychmiast bez zbędnego oczekiwania</li>
-            <li><strong>Łatwe w obsłudze</strong> - intuicyjny interfejs, który każdy zrozumie</li>
-            <li><strong>Dostępne wszędzie</strong> - działają na komputerach, tabletach i telefonach</li>
-            <li><strong>Całkowicie darmowe</strong> - bez ukrytych opłat i bez rejestracji</li>
+            <li><strong><?php echo $lang['home_tools_fast'] ?? 'Fast and efficient'; ?></strong> - <?php echo $lang['home_tools_fast_desc'] ?? 'work instantly with no waiting'; ?></li>
+            <li><strong><?php echo $lang['home_tools_easy'] ?? 'Easy to use'; ?></strong> - <?php echo $lang['home_tools_easy_desc'] ?? 'intuitive interface that anyone can understand'; ?></li>
+            <li><strong><?php echo $lang['home_tools_available'] ?? 'Available everywhere'; ?></strong> - <?php echo $lang['home_tools_available_desc'] ?? 'work on computers, tablets and phones'; ?></li>
+            <li><strong><?php echo $lang['home_tools_free'] ?? 'Completely free'; ?></strong> - <?php echo $lang['home_tools_free_desc'] ?? 'no hidden fees and no registration required'; ?></li>
         </ul>
         
-        <p>Niezależnie od tego, czy chcesz obliczyć swoje BMI, sprawdzić dzienne zapotrzebowanie kaloryczne, konwertować jednostki czy pobrać wideo z popularnych serwisów - nasze narzędzia są tutaj, aby Ci pomóc.</p>
+        <p><?php echo $lang['home_tools_outro'] ?? 'Whether you want to calculate your BMI, check your daily caloric needs, convert units or download videos from popular services - our tools are here to help you.'; ?></p>
     </div>
 </div>
 
 <!-- FAQ -->
 <div class="mb-12">
-    <h2 class="text-3xl font-bold mb-6 text-center">Często zadawane pytania</h2>
+    <h2 class="text-3xl font-bold mb-6 text-center"><?php echo $lang['home_faq_title'] ?? 'Frequently Asked Questions'; ?></h2>
     
     <div class="space-y-4">
         <div x-data="{ open: false }" class="border border-gray-200 rounded-lg overflow-hidden">
             <button @click="open = !open" class="flex justify-between items-center w-full p-4 text-left bg-white hover:bg-gray-50">
-                <span class="font-medium">Czy korzystanie z narzędzi jest darmowe?</span>
+                <span class="font-medium"><?php echo $lang['home_faq_free'] ?? 'Are the tools free to use?'; ?></span>
                 <svg class="h-5 w-5 text-gray-500" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
             <div x-show="open" class="p-4 bg-gray-50 border-t border-gray-200">
-                <p>Tak, wszystkie narzędzia na naszej stronie są całkowicie darmowe i nie wymagają rejestracji ani logowania.</p>
+                <p><?php echo $lang['home_faq_free_answer'] ?? 'Yes, all tools on our site are completely free and don\'t require registration or login.'; ?></p>
             </div>
         </div>
         
         <div x-data="{ open: false }" class="border border-gray-200 rounded-lg overflow-hidden">
             <button @click="open = !open" class="flex justify-between items-center w-full p-4 text-left bg-white hover:bg-gray-50">
-                <span class="font-medium">Czy pobieranie wideo z YouTube jest legalne?</span>
+                <span class="font-medium"><?php echo $lang['home_faq_youtube'] ?? 'Is downloading videos from YouTube legal?'; ?></span>
                 <svg class="h-5 w-5 text-gray-500" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
             <div x-show="open" class="p-4 bg-gray-50 border-t border-gray-200">
-                <p>Pobieranie wideo z YouTube do użytku osobistego może być legalne w niektórych krajach, ale warto zapoznać się z regulaminem serwisu. Nasza usługa YouTube Downloader obecnie oferuje jedynie formularz demonstracyjny, zgodnie z warunkami serwisu YouTube.</p>
+                <p><?php echo $lang['home_faq_youtube_answer'] ?? 'Downloading videos from YouTube for personal use may be legal in some countries, but it\'s important to check YouTube\'s terms of service. Our YouTube Downloader currently only offers a demonstration form, in accordance with YouTube\'s terms of service.'; ?></p>
             </div>
         </div>
         
         <div x-data="{ open: false }" class="border border-gray-200 rounded-lg overflow-hidden">
             <button @click="open = !open" class="flex justify-between items-center w-full p-4 text-left bg-white hover:bg-gray-50">
-                <span class="font-medium">Jak dokładny jest kalkulator BMI?</span>
+                <span class="font-medium"><?php echo $lang['home_faq_bmi'] ?? 'How accurate is the BMI calculator?'; ?></span>
                 <svg class="h-5 w-5 text-gray-500" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
             <div x-show="open" class="p-4 bg-gray-50 border-t border-gray-200">
-                <p>Kalkulator BMI oblicza wskaźnik masy ciała na podstawie wagi i wzrostu. Jest to powszechnie stosowana metoda oceny masy ciała, jednak należy pamiętać, że BMI nie uwzględnia składu ciała (proporcji mięśni do tłuszczu) i może nie być odpowiedni dla każdego, np. sportowców.</p>
+                <p><?php echo $lang['home_faq_bmi_answer'] ?? 'The BMI calculator calculates the Body Mass Index based on weight and height. It\'s a commonly used method to assess body weight, but it doesn\'t account for body composition (muscle to fat ratio) and may not be appropriate for everyone, e.g., athletes.'; ?></p>
             </div>
         </div>
         
         <div x-data="{ open: false }" class="border border-gray-200 rounded-lg overflow-hidden">
             <button @click="open = !open" class="flex justify-between items-center w-full p-4 text-left bg-white hover:bg-gray-50">
-                <span class="font-medium">Czy moje dane są bezpieczne?</span>
+                <span class="font-medium"><?php echo $lang['home_faq_data'] ?? 'Is my data safe?'; ?></span>
                 <svg class="h-5 w-5 text-gray-500" :class="{'transform rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </button>
             <div x-show="open" class="p-4 bg-gray-50 border-t border-gray-200">
-                <p>Tak, wszystkie obliczenia są wykonywane lokalnie w Twojej przeglądarce. Nie przechowujemy żadnych danych osobowych ani wyników obliczeń na naszych serwerach.</p>
+                <p><?php echo $lang['home_faq_data_answer'] ?? 'Yes, all calculations are performed locally in your browser. We don\'t store any personal data or calculation results on our servers.'; ?></p>
             </div>
         </div>
     </div>
@@ -216,11 +216,11 @@ $pageDescription = 'Darmowe narzędzia online: kalkulatory BMI i kalorii, konwer
 
 <!-- CTA -->
 <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-10 px-8 rounded-lg shadow-lg text-center">
-    <h2 class="text-3xl font-bold mb-4">Wypróbuj nasze narzędzia już teraz!</h2>
-    <p class="text-xl mb-8">Szybko, łatwo i całkowicie za darmo - bez rejestracji.</p>
+    <h2 class="text-3xl font-bold mb-4"><?php echo $lang['home_cta_title'] ?? 'Try our tools now!'; ?></h2>
+    <p class="text-xl mb-8"><?php echo $lang['home_cta_subtitle'] ?? 'Quick, easy and completely free - no registration required.'; ?></p>
     <div class="flex flex-wrap justify-center gap-4">
-        <a href="/bmi" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">Kalkulator BMI</a>
-        <a href="/calories" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">Kalkulator kalorii</a>
-        <a href="/youtube" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition">YouTube Downloader</a>
+        <a href="/bmi" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition"><?php echo $lang['menu_bmi'] ?? 'BMI Calculator'; ?></a>
+        <a href="/calories" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition"><?php echo $lang['menu_calories'] ?? 'Calorie Calculator'; ?></a>
+        <a href="/youtube" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-blue-50 transition"><?php echo $lang['menu_youtube'] ?? 'YouTube Downloader'; ?></a>
     </div>
 </div>

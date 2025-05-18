@@ -1,28 +1,28 @@
 <?php
-// Włącz wyświetlanie błędów
+// Enable error display
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Rozpocznij sesję
+// Start session
 session_start();
 
-// Sprawdź, czy użytkownik jest zalogowany
+// Check if user is logged in
 if (!isset($_SESSION['user'])) {
     header("Location: login.php");
     exit;
 }
 
-// Sprawdź, czy użytkownik ma uprawnienia administratora
+// Check if user has admin privileges
 if ($_SESSION['user']['role'] !== 'admin') {
     header("Location: dashboard.php");
     exit;
 }
 
-// Połączenie z bazą danych
+// Database connection
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/includes/language.php';
 
-// Tworzenie tabeli settings, jeśli nie istnieje
+// Create settings table if it doesn't exist
 try {
     $tableExists = $pdo->query("SHOW TABLES LIKE 'settings'")->rowCount() > 0;
     
@@ -38,24 +38,30 @@ try {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )");
         
-        // Dodanie domyślnych ustawień
+        // Add default settings
         $defaultSettings = [
-            ['site_name', 'ToolsOnline', 'text', 'general', 'Nazwa strony wyświetlana w nagłówku i tytule'],
-            ['site_description', 'Darmowe narzędzia online: kalkulatory, konwertery i downloadery.', 'textarea', 'general', 'Krótki opis strony używany w znacznikach meta'],
-            ['contact_email', 'contact@example.com', 'email', 'general', 'Adres email do kontaktu'],
-            ['google_analytics', '', 'textarea', 'integrations', 'Kod śledzenia Google Analytics'],
-            ['show_ads', '1', 'boolean', 'ads', 'Włącz/wyłącz wyświetlanie reklam'],
-            ['ad_header', '', 'textarea', 'ads', 'Kod reklamy dla górnego bannera'],
-            ['ad_footer', '', 'textarea', 'ads', 'Kod reklamy dla dolnego bannera'],
-            ['ad_sidebar', '', 'textarea', 'ads', 'Kod reklamy dla paska bocznego'],
-            ['copyright_text', '&copy; ' . date('Y') . ' ToolsOnline. Wszelkie prawa zastrzeżone.', 'textarea', 'general', 'Tekst praw autorskich w stopce'],
-            ['maintenance_mode', '0', 'boolean', 'system', 'Tryb konserwacji strony'],
-            ['maintenance_message', 'Strona jest chwilowo niedostępna z powodu prac konserwacyjnych. Przepraszamy za utrudnienia.', 'textarea', 'system', 'Komunikat w trybie konserwacji'],
-            ['default_language', 'en', 'select', 'localization', 'Domyślny język strony'],
-            ['enable_multilingual', '1', 'boolean', 'localization', 'Włącz obsługę wielu języków'],
-            ['date_format', 'd.m.Y', 'text', 'localization', 'Format daty'],
-            ['time_format', 'H:i', 'text', 'localization', 'Format czasu'],
-            ['timezone', 'Europe/Warsaw', 'select', 'localization', 'Strefa czasowa']
+            ['site_name', 'ToolsOnline', 'text', 'general', 'Site name displayed in header and title'],
+            ['site_description', 'Free online tools: calculators, converters and downloaders.', 'textarea', 'general', 'Short site description used in meta tags'],
+            ['contact_email', 'contact@example.com', 'email', 'general', 'Contact email address'],
+            ['google_analytics', '', 'textarea', 'integrations', 'Google Analytics tracking code'],
+            ['show_ads', '1', 'boolean', 'ads', 'Enable/disable ad display'],
+            ['header_logo', '', 'image', 'appearance', 'Header logo image'],
+            ['footer_logo', '', 'image', 'appearance', 'Footer logo image'],
+            ['copyright_text', '&copy; ' . date('Y') . ' ToolsOnline. All rights reserved.', 'textarea', 'general', 'Copyright text in footer'],
+            ['maintenance_mode', '0', 'boolean', 'system', 'Site maintenance mode'],
+            ['maintenance_message', 'The site is temporarily unavailable due to maintenance. We apologize for the inconvenience.', 'textarea', 'system', 'Maintenance mode message'],
+            ['default_language', 'en', 'select', 'localization', 'Default site language'],
+            ['enable_multilingual', '1', 'boolean', 'localization', 'Enable multilingual support'],
+            ['enable_registration', '1', 'boolean', 'users', 'Enable user registration'],
+            ['date_format', 'd.m.Y', 'text', 'localization', 'Date format'],
+            ['time_format', 'H:i', 'text', 'localization', 'Time format'],
+            ['timezone', 'Europe/Warsaw', 'select', 'localization', 'Timezone'],
+            ['meta_title', 'ToolsOnline - Free Online Tools', 'text', 'seo', 'Default meta title'],
+            ['meta_description', 'Free online tools: calculators, converters and downloaders all in one place.', 'textarea', 'seo', 'Default meta description'],
+            ['meta_keywords', 'online tools, calculators, converters, downloaders', 'text', 'seo', 'Meta keywords (comma separated)'],
+            ['google_site_verification', '', 'text', 'seo', 'Google site verification code'],
+            ['bing_site_verification', '', 'text', 'seo', 'Bing site verification code'],
+            ['robots_txt', 'User-agent: *\nAllow: /', 'textarea', 'seo', 'Robots.txt content']
         ];
         
         $stmt = $pdo->prepare("INSERT INTO settings (setting_key, setting_value, setting_type, setting_group, setting_description) VALUES (?, ?, ?, ?, ?)");
@@ -64,13 +70,13 @@ try {
             $stmt->execute($setting);
         }
         
-        $success = "Tabela ustawień została utworzona i wypełniona domyślnymi danymi.";
+        $success = "Settings table was created and filled with default data.";
     }
 } catch (PDOException $e) {
-    $error = "Błąd podczas tworzenia tabeli ustawień: " . $e->getMessage();
+    $error = "Error creating settings table: " . $e->getMessage();
 }
 
-// Funkcja do pobierania ustawień
+// Function to get settings
 function getSettings($group = null) {
     global $pdo;
     
@@ -88,7 +94,7 @@ function getSettings($group = null) {
     }
 }
 
-// Funkcja do pobierania grup ustawień
+// Function to get setting groups
 function getSettingGroups() {
     global $pdo;
     
@@ -96,19 +102,18 @@ function getSettingGroups() {
         $stmt = $pdo->query("SELECT DISTINCT setting_group FROM settings ORDER BY setting_group");
         $groups = $stmt->fetchAll(PDO::FETCH_COLUMN);
         
-        // Nazwy grup w czytelnej formie
+        // Group names in readable form
         $groupNames = [
-            'general' => 'Ogólne',
-            'integrations' => 'Integracje',
-            'ads' => 'Reklamy',
+            'general' => 'General',
+            'integrations' => 'Integrations',
+            'ads' => 'Advertisements',
             'system' => 'System',
-            'localization' => 'Lokalizacja'
+            'localization' => 'Localization',
+            'appearance' => 'Appearance',
+            'users' => 'Users',
+            'seo' => 'SEO & Meta'
         ];
         
-        $result = [];
-        foreach ($groups as $group) {
-            $result[$group] = $groupNames[$group] ?? ucfirst($group);
-        }
         $result = [];
         foreach ($groups as $group) {
             $result[$group] = $groupNames[$group] ?? ucfirst($group);
@@ -120,7 +125,7 @@ function getSettingGroups() {
     }
 }
 
-// Obsługa aktualizacji ustawień
+// Handle settings update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_settings') {
     try {
         $stmt = $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = ?");
@@ -129,14 +134,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $stmt->execute([$value, $key]);
         }
         
-        $success = "Ustawienia zostały pomyślnie zaktualizowane.";
+        // Handle file uploads for logo images
+        if (!empty($_FILES['header_logo']['name'])) {
+            $uploadDir = __DIR__ . '/../assets/images/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            
+            $fileName = 'header_logo.' . pathinfo($_FILES['header_logo']['name'], PATHINFO_EXTENSION);
+            $uploadFile = $uploadDir . $fileName;
+            
+            if (move_uploaded_file($_FILES['header_logo']['tmp_name'], $uploadFile)) {
+                $logoPath = '/assets/images/' . $fileName;
+                $stmt->execute([$logoPath, 'header_logo']);
+            }
+        }
+        
+        if (!empty($_FILES['footer_logo']['name'])) {
+            $uploadDir = __DIR__ . '/../assets/images/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            
+            $fileName = 'footer_logo.' . pathinfo($_FILES['footer_logo']['name'], PATHINFO_EXTENSION);
+            $uploadFile = $uploadDir . $fileName;
+            
+            if (move_uploaded_file($_FILES['footer_logo']['tmp_name'], $uploadFile)) {
+                $logoPath = '/assets/images/' . $fileName;
+                $stmt->execute([$logoPath, 'footer_logo']);
+            }
+        }
+        
+        $success = "Settings were successfully updated.";
     } catch (Exception $e) {
-        $error = "Błąd podczas aktualizacji ustawień: " . $e->getMessage();
+        $error = "Error updating settings: " . $e->getMessage();
     }
 }
 
-// Tytuł strony
-$pageTitle = "Panel Administracyjny - Ustawienia Systemu";
+// Page title
+$pageTitle = "Admin Panel - System Settings";
 include_once 'includes/admin_header.php';
 ?>
 
@@ -148,7 +184,7 @@ include_once 'includes/admin_header.php';
     <div class="flex-1 overflow-auto">
         <main class="p-6">
             <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl font-semibold text-gray-800">Ustawienia Systemu</h1>
+                <h1 class="text-3xl font-semibold text-gray-800">System Settings</h1>
             </div>
 
             <?php if (isset($error)): ?>
@@ -165,12 +201,12 @@ include_once 'includes/admin_header.php';
 
             <!-- Settings form -->
             <div class="bg-white shadow-md rounded-lg p-6">
-                <form method="POST" action="settings.php">
+                <form method="POST" action="settings.php" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="update_settings">
                     
                     <div class="mb-6">
                         <div class="sm:hidden">
-                            <label for="setting_group" class="sr-only">Wybierz grupę ustawień</label>
+                            <label for="setting_group" class="sr-only">Select settings group</label>
                             <select id="setting_group" name="setting_group" class="block w-full rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
                                 <?php foreach (getSettingGroups() as $key => $name): ?>
                                     <option value="<?php echo $key; ?>"><?php echo htmlspecialchars($name); ?></option>
@@ -204,8 +240,8 @@ include_once 'includes/admin_header.php';
                                     <?php elseif ($setting['setting_type'] === 'boolean'): ?>
                                         <div class="mt-1">
                                             <select id="settings-<?php echo $setting['setting_key']; ?>" name="settings[<?php echo $setting['setting_key']; ?>]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                                <option value="1" <?php echo $setting['setting_value'] === '1' ? 'selected' : ''; ?>>Włączone</option>
-                                                <option value="0" <?php echo $setting['setting_value'] === '0' ? 'selected' : ''; ?>>Wyłączone</option>
+                                                <option value="1" <?php echo $setting['setting_value'] === '1' ? 'selected' : ''; ?>>Enabled</option>
+                                                <option value="0" <?php echo $setting['setting_value'] === '0' ? 'selected' : ''; ?>>Disabled</option>
                                             </select>
                                         </div>
                                     
@@ -240,12 +276,23 @@ include_once 'includes/admin_header.php';
                                             </select>
                                         </div>
                                     
+                                    <?php elseif ($setting['setting_type'] === 'image'): ?>
+                                        <div class="mt-1">
+                                            <?php if (!empty($setting['setting_value'])): ?>
+                                                <div class="mb-2">
+                                                    <img src="<?php echo htmlspecialchars($setting['setting_value']); ?>" alt="Current <?php echo htmlspecialchars($setting['setting_key']); ?>" class="h-16 object-contain">
+                                                </div>
+                                            <?php endif; ?>
+                                            <input type="file" id="<?php echo $setting['setting_key']; ?>" name="<?php echo $setting['setting_key']; ?>" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                            <input type="hidden" name="settings[<?php echo $setting['setting_key']; ?>]" value="<?php echo htmlspecialchars($setting['setting_value']); ?>">
+                                        </div>
+                                    
                                     <?php else: ?>
                                         <input type="text" id="settings-<?php echo $setting['setting_key']; ?>" name="settings[<?php echo $setting['setting_key']; ?>]" value="<?php echo htmlspecialchars($setting['setting_value']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
                                     <?php endif; ?>
                                     
                                     <?php if ($setting['setting_type'] === 'textarea' && in_array($setting['setting_key'], ['ad_header', 'ad_footer', 'ad_sidebar'])): ?>
-                                        <p class="mt-1 text-xs text-gray-500">Wprowadź kod HTML reklamy AdSense lub innej reklamy.</p>
+                                        <p class="mt-1 text-xs text-gray-500">Enter AdSense code or other ad HTML.</p>
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
@@ -254,7 +301,7 @@ include_once 'includes/admin_header.php';
                     
                     <div class="flex justify-end mt-6">
                         <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Zapisz ustawienia
+                            Save Settings
                         </button>
                     </div>
                 </form>

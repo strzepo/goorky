@@ -4,6 +4,7 @@
 $lang = [
     // General
     'current_language' => 'English',
+    'language_code' => 'en',
     'username' => 'Username',
     'email' => 'Email',
     'password' => 'Password',
@@ -135,4 +136,125 @@ $lang = [
     'profile_password_updated' => 'Password updated successfully',
     'profile_info_updated' => 'Profile information updated successfully',
     'profile_incorrect_password' => 'Current password is incorrect',
+    
+    // Menu items
+    'menu_home' => 'Home',
+    'menu_calculators' => 'Calculators',
+    'menu_bmi' => 'BMI Calculator',
+    'menu_calories' => 'Calorie Calculator',
+    'menu_units' => 'Unit Converter',
+    'menu_dates' => 'Date Calculator',
+    'menu_password' => 'Password Generator',
+    'menu_downloaders' => 'Downloaders',
+    'menu_youtube' => 'YouTube',
+    'menu_instagram' => 'Instagram',
+    'menu_facebook' => 'Facebook',
+    'menu_vimeo' => 'Vimeo',
+    
+    // Footer
+    'footer_description' => 'Free online tools: calculators, converters and downloaders all in one place.',
+    'footer_calculators' => 'Calculators',
+    'footer_tools' => 'Tools',
+    'footer_contact' => 'Contact',
+    'footer_about' => 'About Us',
+    'footer_privacy' => 'Privacy Policy',
+    'footer_terms' => 'Terms of Use',
+    'footer_rights' => 'All rights reserved.',
+    
+    // Ads
+    'ad_placeholder' => 'Advertisement space',
+    
+    // Home page
+    'home_title' => 'Free Online Tools',
+    'home_subtitle' => 'Calculators, converters and video downloaders - all in one place!',
+    'home_try_tools' => 'Try our tools now!',
+    
+    // BMI Calculator
+    'bmi_title' => 'BMI Calculator',
+    'bmi_description' => 'BMI (Body Mass Index) is a measure of body fat based on height and weight that applies to adult men and women.',
+    'bmi_weight' => 'Weight (kg)',
+    'bmi_height' => 'Height (cm)',
+    'bmi_calculate' => 'Calculate BMI',
+    'bmi_result' => 'Your BMI result',
+    'bmi_category' => 'Category',
+    
+    // Calorie Calculator
+    'calories_title' => 'Calorie Calculator',
+    'calories_description' => 'Calculate your daily caloric needs based on your age, gender, weight, height and physical activity level.',
+    'calories_gender' => 'Gender',
+    'calories_male' => 'Male',
+    'calories_female' => 'Female',
+    'calories_age' => 'Age (years)',
+    'calories_weight' => 'Weight (kg)',
+    'calories_height' => 'Height (cm)',
+    'calories_activity' => 'Activity Level',
+    'calories_calculate' => 'Calculate calories',
+    'calories_result' => 'Your daily caloric needs',
+    
+    // Units Converter
+    'units_title' => 'Unit Converter',
+    'units_description' => 'Quickly and easily convert between different units of measurement. Choose the conversion type, the source unit, the target unit and enter a value.',
+    'units_type' => 'Conversion type',
+    'units_length' => 'Length',
+    'units_weight' => 'Weight',
+    'units_temperature' => 'Temperature',
+    'units_value' => 'Value',
+    'units_from' => 'From',
+    'units_to' => 'To',
+    'units_convert' => 'Convert',
+    'units_result' => 'Conversion result',
+    
+    // Date Calculator
+    'dates_title' => 'Date Calculator',
+    'dates_description' => 'Calculate the difference between two dates or add/subtract days from a date.',
+    'dates_operation' => 'Choose operation',
+    'dates_difference' => 'Difference between dates',
+    'dates_add' => 'Add days to date',
+    'dates_subtract' => 'Subtract days from date',
+    'dates_first_date' => 'First date',
+    'dates_second_date' => 'Second date',
+    'dates_days' => 'Number of days',
+    'dates_calculate' => 'Calculate',
+    'dates_result' => 'Result',
+    
+    // Password Generator
+    'password_title' => 'Password Generator',
+    'password_description' => 'Create a secure, random password customized to your requirements. Choose the password length and the types of characters to be used.',
+    'password_length' => 'Password length',
+    'password_options' => 'Options',
+    'password_uppercase' => 'Uppercase letters (A-Z)',
+    'password_lowercase' => 'Lowercase letters (a-z)',
+    'password_numbers' => 'Numbers (0-9)',
+    'password_special' => 'Special characters (!@#$%^&*()_-+=<>?)',
+    'password_generate' => 'Generate password',
+    'password_generated' => 'Generated password',
+    'password_strength' => 'Password strength',
+    
+    // YouTube Downloader
+    'youtube_title' => 'YouTube Downloader',
+    'youtube_description' => 'Download videos from YouTube in various formats and qualities. Just paste a YouTube video link and choose the format.',
+    'youtube_link' => 'YouTube video link',
+    'youtube_download' => 'Download',
+    'youtube_info' => 'Video information',
+    
+    // Instagram Downloader
+    'instagram_title' => 'Instagram Downloader',
+    'instagram_description' => 'Download photos and videos from Instagram using a post link. Just paste a link and click "Download".',
+    'instagram_link' => 'Instagram post link',
+    'instagram_download' => 'Download',
+    'instagram_media' => 'Found media',
+    
+    // Facebook Downloader
+    'facebook_title' => 'Facebook Downloader',
+    'facebook_description' => 'Download public videos from Facebook using a link. Just paste a video link and click "Download".',
+    'facebook_link' => 'Facebook video link',
+    'facebook_download' => 'Download',
+    'facebook_video' => 'Found video',
+    
+    // Vimeo Downloader
+    'vimeo_title' => 'Vimeo Downloader',
+    'vimeo_description' => 'Download videos from Vimeo using a link. Just paste a video link and click "Download".',
+    'vimeo_link' => 'Vimeo video link',
+    'vimeo_download' => 'Download',
+    'vimeo_video' => 'Found video'
 ];

@@ -2,8 +2,13 @@
 // Polish language file
 
 $lang = [
-    // General
+    // Common website parts
     'current_language' => 'Polski',
+    'language_code' => 'pl',
+    'site_title' => 'Goorky - Darmowe narzędzia online',
+    'site_description' => 'Darmowe narzędzia online: kalkulatory, konwertery i downloadery w jednym miejscu.',
+    
+    // General
     'username' => 'Nazwa użytkownika',
     'email' => 'Email',
     'password' => 'Hasło',
@@ -135,4 +140,81 @@ $lang = [
     'profile_password_updated' => 'Hasło zostało pomyślnie zaktualizowane',
     'profile_info_updated' => 'Informacje profilowe zostały pomyślnie zaktualizowane',
     'profile_incorrect_password' => 'Aktualne hasło jest nieprawidłowe',
-];
+        // Menu
+        'menu_home' => 'Strona główna',
+        'menu_calculators' => 'Kalkulatory',
+        'menu_bmi' => 'Kalkulator BMI',
+        'menu_calories' => 'Kalkulator kalorii',
+        'menu_units' => 'Konwerter jednostek',
+        'menu_dates' => 'Kalkulator dat',
+        'menu_tools' => 'Narzędzia',
+        'menu_password_generator' => 'Generator haseł',
+        'menu_downloaders' => 'Downloadery',
+        'menu_youtube' => 'YouTube Downloader',
+        'menu_instagram' => 'Instagram Downloader',
+        'menu_facebook' => 'Facebook Downloader',
+        'menu_vimeo' => 'Vimeo Downloader',
+        'menu_login' => 'Logowanie',
+        'menu_register' => 'Rejestracja',
+        
+        // Home page
+        'home_hero_title' => 'Darmowe narzędzia online',
+        'home_hero_subtitle' => 'Kalkulatory, konwertery i downloadery wideo - wszystko w jednym miejscu!',
+        'home_popular_calculators' => 'Popularne kalkulatory',
+        'home_video_downloaders' => 'Downloadery wideo',
+        'home_about_title' => 'O naszych narzędziach',
+        'home_about_description' => 'ToolsOnline to zestaw darmowych narzędzi internetowych, które pomagają w codziennych zadaniach. Nasza strona oferuje kalkulatory, konwertery i downloadery wideo - wszystko w jednym miejscu i całkowicie za darmo.',
+        'home_faq_title' => 'Często zadawane pytania',
+        'home_cta_title' => 'Wypróbuj nasze narzędzia już teraz!',
+        'home_cta_subtitle' => 'Szybko, łatwo i całkowicie za darmo - bez rejestracji.',
+        
+        // Calculator tools
+        'bmi_title' => 'Kalkulator BMI',
+        'bmi_description' => 'BMI (Body Mass Index) to wskaźnik masy ciała, który pomaga ocenić, czy waga jest prawidłowa w stosunku do wzrostu. Oblicz swoje BMI już teraz!',
+        'calories_title' => 'Kalkulator kalorii',
+        'calories_description' => 'Oblicz swoje dzienne zapotrzebowanie kaloryczne na podstawie wieku, płci, wagi, wzrostu i poziomu aktywności fizycznej. Wynik pomoże Ci w planowaniu diety i kontroli wagi.',
+        'units_title' => 'Konwerter jednostek',
+        'units_description' => 'Szybko i łatwo konwertuj między różnymi jednostkami miary. Wybierz typ konwersji, jednostkę źródłową, jednostkę docelową i wprowadź wartość.',
+        'dates_title' => 'Kalkulator dat',
+        'dates_description' => 'Oblicz różnicę między dwiema datami lub dodaj/odejmij określoną liczbę dni od danej daty.',
+        'password_generator_title' => 'Generator haseł',
+        'password_generator_description' => 'Stwórz bezpieczne, losowe hasło dostosowane do Twoich wymagań. Wybierz długość hasła i rodzaje znaków, które mają być użyte.',
+        
+        // Downloader tools
+        'youtube_downloader_title' => 'YouTube Downloader',
+        'youtube_downloader_description' => 'Pobieraj filmy z YouTube w różnych formatach i jakościach. Wystarczy wkleić link do filmu YouTube i wybrać format.',
+        'instagram_downloader_title' => 'Instagram Downloader',
+        'instagram_downloader_description' => 'Pobieraj zdjęcia i filmy z Instagrama za pomocą linku do postu. Wystarczy wkleić link i kliknąć "Pobierz".',
+        'facebook_downloader_title' => 'Facebook Downloader',
+        'facebook_downloader_description' => 'Pobieraj publiczne filmy z Facebooka za pomocą linku. Wystarczy wkleić link do filmu i kliknąć "Pobierz".',
+        'vimeo_downloader_title' => 'Vimeo Downloader',
+        'vimeo_downloader_description' => 'Pobieraj filmy z Vimeo za pomocą linku. Wystarczy wkleić link do filmu i kliknąć "Pobierz".',
+        
+        // Footer
+        'footer_about' => 'O ToolsOnline',
+        'footer_about_description' => 'Darmowe narzędzia online ułatwiające codzienne zadania. Kalkulatory, konwertery i downloadery w jednym miejscu.',
+        'footer_calculators' => 'Kalkulatory',
+        'footer_tools' => 'Narzędzia',
+        'footer_contact' => 'Kontakt',
+        'footer_about_us' => 'O nas',
+        'footer_privacy_policy' => 'Polityka prywatności',
+        'footer_terms' => 'Warunki korzystania',
+        'footer_contact_us' => 'Kontakt',
+        'footer_copyright' => 'Wszelkie prawa zastrzeżone.',
+        
+        // UI elements
+        'calculate' => 'Oblicz',
+        'generate' => 'Generuj',
+        'convert' => 'Konwertuj',
+        'check_now' => 'Sprawdź teraz',
+        'learn_more' => 'Dowiedz się więcej',
+        'try_now' => 'Wypróbuj teraz',
+        'weight' => 'Waga',
+        'height' => 'Wzrost',
+        'age' => 'Wiek',
+        'gender' => 'Płeć',
+        'male' => 'Mężczyzna',
+        'female' => 'Kobieta',
+        'result' => 'Wynik',
+
+    ];

@@ -1,9 +1,52 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="<?php echo $_SESSION['language'] ?? 'en'; ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php echo generateSeoTags($pageTitle, $pageDescription); ?>
+    <?php
+    // Get site settings for SEO
+    $settings = [];
+    try {
+        $stmt = $pdo->query("SELECT setting_key, setting_value FROM settings");
+        $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    } catch (Exception $e) {
+        // Silently fail if settings table doesn't exist yet
+    }
+    
+    // Use settings for SEO if available, otherwise use defaults
+    $meta_title = $settings['meta_title'] ?? $pageTitle;
+    $meta_description = $settings['meta_description'] ?? $pageDescription;
+    $meta_keywords = $settings['meta_keywords'] ?? '';
+    $google_site_verification = $settings['google_site_verification'] ?? '';
+    $bing_site_verification = $settings['bing_site_verification'] ?? '';
+    
+    // Output SEO meta tags
+    echo "<title>" . htmlspecialchars($meta_title) . "</title>\n";
+    echo "<meta name=\"description\" content=\"" . htmlspecialchars($meta_description) . "\">\n";
+    
+    if (!empty($meta_keywords)) {
+        echo "<meta name=\"keywords\" content=\"" . htmlspecialchars($meta_keywords) . "\">\n";
+    }
+    
+    // Site verification codes
+    if (!empty($google_site_verification)) {
+        echo "<meta name=\"google-site-verification\" content=\"" . htmlspecialchars($google_site_verification) . "\">\n";
+    }
+    
+    if (!empty($bing_site_verification)) {
+        echo "<meta name=\"msvalidate.01\" content=\"" . htmlspecialchars($bing_site_verification) . "\">\n";
+    }
+    
+    // Open Graph tags
+    echo "<meta property=\"og:title\" content=\"" . htmlspecialchars($meta_title) . "\">\n";
+    echo "<meta property=\"og:description\" content=\"" . htmlspecialchars($meta_description) . "\">\n";
+    echo "<meta property=\"og:type\" content=\"website\">\n";
+    
+    // Twitter Card tags
+    echo "<meta name=\"twitter:card\" content=\"summary\">\n";
+    echo "<meta name=\"twitter:title\" content=\"" . htmlspecialchars($meta_title) . "\">\n";
+    echo "<meta name=\"twitter:description\" content=\"" . htmlspecialchars($meta_description) . "\">\n";
+    ?>
     
     <!-- TailwindCSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
@@ -20,23 +63,29 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Dodatkowe skrypty -->
+    <!-- Additional scripts -->
     <script src="/assets/js/main.js" defer></script>
     
-    <!-- Miejsce na kod AdSense -->
-    <?php /* 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    */ ?>
+    <!-- Google Analytics -->
+    <?php if (!empty($settings['google_analytics'])): ?>
+        <?php echo $settings['google_analytics']; ?>
+    <?php endif; ?>
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
-    <!-- Nagłówek -->
+    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
-                <a href="/" class="text-2xl font-bold text-blue-600">ToolsOnline</a>
+                <a href="/" class="flex items-center">
+                    <?php if (!empty($settings['header_logo'])): ?>
+                        <img src="<?php echo htmlspecialchars($settings['header_logo']); ?>" alt="<?php echo htmlspecialchars($settings['site_name'] ?? 'ToolsOnline'); ?>" class="h-8 w-auto">
+                    <?php else: ?>
+                        <span class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($settings['site_name'] ?? 'ToolsOnline'); ?></span>
+                    <?php endif; ?>
+                </a>
                 
-                <!-- Menu mobilne -->
+                <!-- Mobile menu button -->
                 <div class="md:hidden">
                     <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500 focus:outline-none">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -45,89 +94,116 @@
                     </button>
                 </div>
                 
-                <!-- Menu dla desktop -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="/" class="text-gray-600 hover:text-blue-600 <?php echo isActivePage('home'); ?>">Strona główna</a>
+                <!-- Desktop menu -->
+                <nav class="hidden md:flex space-x-8 items-center">
+                    <a href="/" class="text-gray-600 hover:text-blue-600 <?php echo isActivePage('home'); ?>">
+                        <?php echo $lang['menu_home'] ?? 'Home'; ?>
+                    </a>
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="text-gray-600 hover:text-blue-600 flex items-center focus:outline-none">
-                            Kalkulatory
+                            <?php echo $lang['menu_calculators'] ?? 'Calculators'; ?>
                             <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                            <a href="/bmi" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('bmi'); ?>">Kalkulator BMI</a>
-                            <a href="/calories" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('calories'); ?>">Kalkulator kalorii</a>
-                            <a href="/units" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('units'); ?>">Konwerter jednostek</a>
-                            <a href="/dates" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('dates'); ?>">Kalkulator dat</a>
+                            <a href="/bmi" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('bmi'); ?>"><?php echo $lang['menu_bmi'] ?? 'BMI Calculator'; ?></a>
+                            <a href="/calories" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('calories'); ?>"><?php echo $lang['menu_calories'] ?? 'Calorie Calculator'; ?></a>
+                            <a href="/units" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('units'); ?>"><?php echo $lang['menu_units'] ?? 'Unit Converter'; ?></a>
+                            <a href="/dates" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('dates'); ?>"><?php echo $lang['menu_dates'] ?? 'Date Calculator'; ?></a>
                         </div>
                     </div>
-                    <a href="/password-generator" class="text-gray-600 hover:text-blue-600 <?php echo isActivePage('password_generator'); ?>">Generator haseł</a>
+                    <a href="/password-generator" class="text-gray-600 hover:text-blue-600 <?php echo isActivePage('password_generator'); ?>"><?php echo $lang['menu_password'] ?? 'Password Generator'; ?></a>
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="text-gray-600 hover:text-blue-600 flex items-center focus:outline-none">
-                            Downloadery
+                            <?php echo $lang['menu_downloaders'] ?? 'Downloaders'; ?>
                             <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <div x-show="open" @click.away="open = false" class="absolute z-10 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
-                            <a href="/youtube" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_youtube'); ?>">YouTube</a>
-                            <a href="/instagram" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_instagram'); ?>">Instagram</a>
-                            <a href="/facebook" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_facebook'); ?>">Facebook</a>
-                            <a href="/vimeo" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_vimeo'); ?>">Vimeo</a>
+                            <a href="/youtube" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_youtube'); ?>"><?php echo $lang['menu_youtube'] ?? 'YouTube'; ?></a>
+                            <a href="/instagram" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_instagram'); ?>"><?php echo $lang['menu_instagram'] ?? 'Instagram'; ?></a>
+                            <a href="/facebook" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_facebook'); ?>"><?php echo $lang['menu_facebook'] ?? 'Facebook'; ?></a>
+                            <a href="/vimeo" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_vimeo'); ?>"><?php echo $lang['menu_vimeo'] ?? 'Vimeo'; ?></a>
                         </div>
                     </div>
                     <div class="flex items-center space-x-4 text-xl">
-                        <a href="?lang=pl" title="Zmień język" class="text-gray-600 hover:text-blue-600">🌐</a>
-                        <a href="/admin/login.php" title="Zaloguj się" class="text-gray-600 hover:text-blue-600">👤</a>
+                        <!-- Language switch -->
+                        <?php echo languageSwitcher(); ?>
+                        
+                        <!-- Login link - only show if registration is enabled -->
+                        <?php if (!isset($settings['enable_registration']) || $settings['enable_registration'] == '1'): ?>
+                        <a href="/admin/login.php" title="<?php echo $lang['login'] ?? 'Login'; ?>" class="text-gray-600 hover:text-blue-600">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </a>
+                        <?php endif; ?>
                     </div>
                 </nav>
             </div>
             
-            <!-- Menu mobilne -->
+            <!-- Mobile menu -->
             <div x-data="{ mobileMenuOpen: false }" x-show="mobileMenuOpen" class="md:hidden mt-2 py-2 border-t border-gray-200">
-                <a href="/" class="block py-2 text-gray-600 hover:text-blue-600">Strona główna</a>
+                <a href="/" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_home'] ?? 'Home'; ?></a>
                 <div x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center w-full py-2 text-gray-600 hover:text-blue-600">
-                        Kalkulatory
+                        <?php echo $lang['menu_calculators'] ?? 'Calculators'; ?>
                         <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div x-show="open" class="pl-4">
-                        <a href="/bmi" class="block py-2 text-gray-600 hover:text-blue-600">Kalkulator BMI</a>
-                        <a href="/calories" class="block py-2 text-gray-600 hover:text-blue-600">Kalkulator kalorii</a>
-                        <a href="/units" class="block py-2 text-gray-600 hover:text-blue-600">Konwerter jednostek</a>
-                        <a href="/dates" class="block py-2 text-gray-600 hover:text-blue-600">Kalkulator dat</a>
+                        <a href="/bmi" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_bmi'] ?? 'BMI Calculator'; ?></a>
+                        <a href="/calories" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_calories'] ?? 'Calorie Calculator'; ?></a>
+                        <a href="/units" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_units'] ?? 'Unit Converter'; ?></a>
+                        <a href="/dates" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_dates'] ?? 'Date Calculator'; ?></a>
                     </div>
                 </div>
-                <a href="/password-generator" class="block py-2 text-gray-600 hover:text-blue-600">Generator haseł</a>
+                <a href="/password-generator" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_password'] ?? 'Password Generator'; ?></a>
                 <div x-data="{ open: false }">
                     <button @click="open = !open" class="flex items-center w-full py-2 text-gray-600 hover:text-blue-600">
-                        Downloadery
+                        <?php echo $lang['menu_downloaders'] ?? 'Downloaders'; ?>
                         <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div x-show="open" class="pl-4">
-                        <a href="/youtube" class="block py-2 text-gray-600 hover:text-blue-600">YouTube</a>
-                        <a href="/instagram" class="block py-2 text-gray-600 hover:text-blue-600">Instagram</a>
-                        <a href="/facebook" class="block py-2 text-gray-600 hover:text-blue-600">Facebook</a>
-                        <a href="/vimeo" class="block py-2 text-gray-600 hover:text-blue-600">Vimeo</a>
+                        <a href="/youtube" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_youtube'] ?? 'YouTube'; ?></a>
+                        <a href="/instagram" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_instagram'] ?? 'Instagram'; ?></a>
+                        <a href="/facebook" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_facebook'] ?? 'Facebook'; ?></a>
+                        <a href="/vimeo" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_vimeo'] ?? 'Vimeo'; ?></a>
                     </div>
-                    <div class="flex items-center space-x-4 pt-4 px-2 text-xl">
-                        <a href="?lang=pl" title="Zmień język" class="text-gray-600 hover:text-blue-600">🌐</a>
-                        <a href="/admin/auth/login.php" title="Zaloguj się" class="text-gray-600 hover:text-blue-600">👤</a>
-                    </div>
+                </div>
+                <div class="flex items-center space-x-4 pt-4 px-2 text-xl">
+                    <!-- Language switch -->
+                    <?php echo languageSwitcher(); ?>
+                    
+                    <!-- Login link - only show if registration is enabled -->
+                    <?php if (!isset($settings['enable_registration']) || $settings['enable_registration'] == '1'): ?>
+                    <a href="/admin/login.php" title="<?php echo $lang['login'] ?? 'Login'; ?>" class="text-gray-600 hover:text-blue-600">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </header>
     
-    <!-- Główna zawartość -->
+    <!-- Main content -->
     <main class="flex-grow container mx-auto px-4 py-8">
-        <!-- Banner AdSense - góra strony -->
+        <!-- Banner AdSense - top of page -->
+        <?php if ((!isset($settings['show_ads']) || $settings['show_ads'] == '1') && !empty($settings['ad_header'])): ?>
         <div class="w-full bg-gray-100 text-center py-4 mb-8">
-            <!-- Kod reklamy Google AdSense -->
-            <div class="text-gray-500">Miejsce na reklamę</div>
+            <!-- Google AdSense Code -->
+            <?php echo $settings['ad_header']; ?>
         </div>
+        <?php else: ?>
+        <div class="w-full bg-gray-100 text-center py-4 mb-8">
+            <!-- Placeholder for ad -->
+            <div class="text-gray-500"><?php echo $lang['ad_placeholder'] ?? 'Advertisement space'; ?></div>
+        </div>
+        <?php endif; ?>

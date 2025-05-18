@@ -30,7 +30,7 @@
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
     <!-- Nagłówek -->
-    <header class="bg-white shadow-sm">
+    <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
@@ -77,6 +77,10 @@
                             <a href="/vimeo" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 <?php echo isActivePage('downloaders_vimeo'); ?>">Vimeo</a>
                         </div>
                     </div>
+                    <div class="flex items-center space-x-4 text-xl">
+                        <a href="?lang=pl" title="Zmień język" class="text-gray-600 hover:text-blue-600">🌐</a>
+                        <a href="/admin/login.php" title="Zaloguj się" class="text-gray-600 hover:text-blue-600">👤</a>
+                    </div>
                 </nav>
             </div>
             
@@ -110,6 +114,10 @@
                         <a href="/instagram" class="block py-2 text-gray-600 hover:text-blue-600">Instagram</a>
                         <a href="/facebook" class="block py-2 text-gray-600 hover:text-blue-600">Facebook</a>
                         <a href="/vimeo" class="block py-2 text-gray-600 hover:text-blue-600">Vimeo</a>
+                    </div>
+                    <div class="flex items-center space-x-4 pt-4 px-2 text-xl">
+                        <a href="?lang=pl" title="Zmień język" class="text-gray-600 hover:text-blue-600">🌐</a>
+                        <a href="/admin/auth/login.php" title="Zaloguj się" class="text-gray-600 hover:text-blue-600">👤</a>
                     </div>
                 </div>
             </div>

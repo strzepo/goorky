@@ -1,4 +1,16 @@
 <?php
+function getFacebookVideoDirectUrl($fbUrl) {
+    $escapedUrl = escapeshellarg($fbUrl);
+    $scriptPath = realpath(__DIR__ . '/../../../scripts/fb_scraper.js');
+
+    if (!$scriptPath) {
+        return ''; // Skrypt nie znaleziony
+    }
+
+    $command = "node " . escapeshellarg($scriptPath) . " $escapedUrl";
+    $output = shell_exec($command);
+    return trim($output);
+}
 // Ustawienie tytułu i opisu strony
 $pageTitle = 'Facebook Downloader - Pobieraj filmy z Facebooka | ToolsOnline';
 $pageDescription = 'Darmowy Facebook Downloader - pobieraj publiczne filmy z Facebooka w wysokiej jakości. Łatwy w użyciu, bez rejestracji i instalacji.';
@@ -8,6 +20,7 @@ $url = '';
 $hasResult = false;
 $errorMessage = '';
 $videoId = '';
+$directVideoUrl = '';
 
 // Obsługa przesłanego formularza
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook'])) {
@@ -23,6 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
             
             if ($videoId) {
                 $hasResult = true;
+                $directVideoUrl = getFacebookVideoDirectUrl($url);
+                if (!$directVideoUrl) {
+                    $errorMessage = 'Nie udało się uzyskać linku do filmu.';
+                    $hasResult = false;
+                }
             } else {
                 $errorMessage = 'Nie udało się zidentyfikować filmu. Upewnij się, że link prowadzi do publicznego filmu na Facebooku.';
             }
@@ -89,8 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
                 <p class="mb-4">Pobieranie filmów z Facebooka może naruszać warunki korzystania z serwisu. Zalecamy pobieranie tylko własnych treści lub treści, do których masz uprawnienia.</p>
                 
                 <div class="mt-4 space-y-2">
-                    <a href="#" class="bg-blue-600 text-white font-semibold px-6 py-2 rounded hover:bg-blue-700 transition inline-block disabled opacity-50 cursor-not-allowed w-full text-center">Pobierz w jakości HD</a>
-                    <a href="#" class="bg-blue-500 text-white font-semibold px-6 py-2 rounded hover:bg-blue-600 transition inline-block disabled opacity-50 cursor-not-allowed w-full text-center">Pobierz w jakości SD</a>
+                    <a href="<?php echo htmlspecialchars($directVideoUrl); ?>" download class="bg-blue-600 text-white font-semibold px-6 py-2 rounded hover:bg-blue-700 transition inline-block w-full text-center">
+                        Pobierz w jakości HD
+                    </a>
+                    <a href="<?php echo htmlspecialchars($directVideoUrl); ?>" download class="bg-blue-500 text-white font-semibold px-6 py-2 rounded hover:bg-blue-600 transition inline-block w-full text-center">
+                        Pobierz w jakości SD
+                    </a>
                 </div>
             </div>
         </div>

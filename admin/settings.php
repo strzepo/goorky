@@ -46,8 +46,12 @@ try {
             ['contact_email', 'contact@example.com', 'email', 'general', 'Contact email address'],
             ['google_analytics', '', 'textarea', 'integrations', 'Google Analytics tracking code'],
             ['show_ads', '1', 'boolean', 'ads', 'Enable/disable ad display'],
+            ['ad_header', '<div class="text-center py-4 bg-gray-100"><!-- Google AdSense Code Here --><div class="text-gray-500">Advertisement space (Header)</div></div>', 'textarea', 'ads', 'Header ad code'],
+            ['ad_footer', '<div class="text-center py-4 bg-gray-100"><!-- Google AdSense Code Here --><div class="text-gray-500">Advertisement space (Footer)</div></div>', 'textarea', 'ads', 'Footer ad code'],
+            ['ad_sidebar', '<div class="text-center py-4 bg-gray-100"><!-- Google AdSense Code Here --><div class="text-gray-500">Advertisement space (Sidebar)</div></div>', 'textarea', 'ads', 'Sidebar ad code'],
             ['header_logo', '', 'image', 'appearance', 'Header logo image'],
             ['footer_logo', '', 'image', 'appearance', 'Footer logo image'],
+            ['social_image', '', 'image', 'social', 'Default social sharing image'],
             ['copyright_text', '&copy; ' . date('Y') . ' ToolsOnline. All rights reserved.', 'textarea', 'general', 'Copyright text in footer'],
             ['maintenance_mode', '0', 'boolean', 'system', 'Site maintenance mode'],
             ['maintenance_message', 'The site is temporarily unavailable due to maintenance. We apologize for the inconvenience.', 'textarea', 'system', 'Maintenance mode message'],
@@ -62,7 +66,13 @@ try {
             ['meta_keywords', 'online tools, calculators, converters, downloaders', 'text', 'seo', 'Meta keywords (comma separated)'],
             ['google_site_verification', '', 'text', 'seo', 'Google site verification code'],
             ['bing_site_verification', '', 'text', 'seo', 'Bing site verification code'],
-            ['robots_txt', 'User-agent: *\nAllow: /', 'textarea', 'seo', 'Robots.txt content']
+            ['robots_txt', 'User-agent: *\nAllow: /', 'textarea', 'seo', 'Robots.txt content'],
+            ['social_facebook', '', 'text', 'social', 'Facebook page URL'],
+            ['social_twitter', '', 'text', 'social', 'Twitter/X profile URL'],
+            ['social_instagram', '', 'text', 'social', 'Instagram profile URL'],
+            ['social_linkedin', '', 'text', 'social', 'LinkedIn profile URL'],
+            ['twitter_site', '', 'text', 'social', 'Twitter/X username (without @)'],
+            ['twitter_creator', '', 'text', 'social', 'Content creator Twitter/X username (without @)']
         ];
         
         $stmt = $pdo->prepare("INSERT INTO settings (setting_key, setting_value, setting_type, setting_group, setting_description) VALUES (?, ?, ?, ?, ?)");
@@ -95,24 +105,37 @@ function getSettings($group = null) {
     }
 }
 
+// Function to get all settings as key-value pairs
+function getAllSettings() {
+    global $pdo;
+    
+    try {
+        $stmt = $pdo->query("SELECT setting_key, setting_value FROM settings");
+        return $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    } catch (Exception $e) {
+        return [];
+    }
+}
+
 // Function to get setting groups
 function getSettingGroups() {
     global $pdo;
     
     try {
-        $stmt = $pdo->query("SELECT DISTINCT setting_group FROM settings ORDER BY setting_group");
+        $stmt = $pdo->query("SELECT DISTINCT setting_group FROM settings ORDER BY FIELD(setting_group, 'general', 'appearance', 'seo', 'social', 'ads', 'localization', 'integrations', 'system', 'users')");
         $groups = $stmt->fetchAll(PDO::FETCH_COLUMN);
         
         // Group names in readable form
         $groupNames = [
-            'general' => 'General',
-            'integrations' => 'Integrations',
-            'ads' => 'Advertisements',
-            'system' => 'System',
-            'localization' => 'Localization',
-            'appearance' => 'Appearance',
-            'users' => 'Users',
-            'seo' => 'SEO & Meta'
+            'general' => $GLOBALS['lang']['settings_general'] ?? 'General',
+            'appearance' => $GLOBALS['lang']['settings_appearance'] ?? 'Appearance',
+            'seo' => $GLOBALS['lang']['settings_seo'] ?? 'SEO & Meta',
+            'social' => $GLOBALS['lang']['settings_social'] ?? 'Social Media',
+            'ads' => $GLOBALS['lang']['settings_ads'] ?? 'Advertisements',
+            'integrations' => $GLOBALS['lang']['settings_integrations'] ?? 'Integrations',
+            'system' => $GLOBALS['lang']['settings_system'] ?? 'System',
+            'localization' => $GLOBALS['lang']['settings_localization'] ?? 'Localization',
+            'users' => $GLOBALS['lang']['settings_users'] ?? 'Users'
         ];
         
         $result = [];
@@ -126,6 +149,9 @@ function getSettingGroups() {
     }
 }
 
+// Get all current settings
+$settings = getAllSettings();
+
 // Handle settings update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_settings') {
     try {
@@ -136,44 +162,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         }
         
         // Handle file uploads for logo images
-        if (!empty($_FILES['header_logo']['name'])) {
-            $uploadDir = __DIR__ . '/../assets/images/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-            
-            $fileName = 'header_logo.' . pathinfo($_FILES['header_logo']['name'], PATHINFO_EXTENSION);
-            $uploadFile = $uploadDir . $fileName;
-            
-            if (move_uploaded_file($_FILES['header_logo']['tmp_name'], $uploadFile)) {
-                $logoPath = '/assets/images/' . $fileName;
-                $stmt->execute([$logoPath, 'header_logo']);
+        $uploadableImages = ['header_logo', 'footer_logo', 'social_image'];
+        
+        foreach ($uploadableImages as $imageKey) {
+            if (!empty($_FILES[$imageKey]['name'])) {
+                $uploadDir = __DIR__ . '/../assets/images/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                $fileInfo = pathinfo($_FILES[$imageKey]['name']);
+                $fileName = $imageKey . '_' . time() . '.' . $fileInfo['extension'];
+                $uploadFile = $uploadDir . $fileName;
+                
+                if (move_uploaded_file($_FILES[$imageKey]['tmp_name'], $uploadFile)) {
+                    $imagePath = '/assets/images/' . $fileName;
+                    $stmt->execute([$imagePath, $imageKey]);
+                    $settings[$imageKey] = $imagePath; // Update local settings array
+                }
             }
         }
         
-        if (!empty($_FILES['footer_logo']['name'])) {
-            $uploadDir = __DIR__ . '/../assets/images/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-            
-            $fileName = 'footer_logo.' . pathinfo($_FILES['footer_logo']['name'], PATHINFO_EXTENSION);
-            $uploadFile = $uploadDir . $fileName;
-            
-            if (move_uploaded_file($_FILES['footer_logo']['tmp_name'], $uploadFile)) {
-                $logoPath = '/assets/images/' . $fileName;
-                $stmt->execute([$logoPath, 'footer_logo']);
-            }
-        }
-        
-        $success = "Settings were successfully updated.";
+        $success = $lang['settings_updated'] ?? "Settings were successfully updated.";
     } catch (Exception $e) {
-        $error = "Error updating settings: " . $e->getMessage();
+        $error = $lang['settings_error'] ?? "Error updating settings: " . $e->getMessage();
     }
 }
 
 // Page title
-$pageTitle = "Admin Panel - System Settings";
+$pageTitle = $lang['settings_page_title'] ?? "Admin Panel - System Settings";
 include_once 'includes/admin_header.php';
 ?>
 
@@ -185,7 +202,7 @@ include_once 'includes/admin_header.php';
     <div class="flex-1 overflow-auto">
         <main class="p-6">
             <div class="flex items-center justify-between mb-6">
-                <h1 class="text-3xl font-semibold text-gray-800">System Settings</h1>
+                <h1 class="text-3xl font-semibold text-gray-800"><?php echo $lang['settings_heading'] ?? 'System Settings'; ?></h1>
             </div>
 
             <?php if (isset($error)): ?>
@@ -215,9 +232,9 @@ include_once 'includes/admin_header.php';
                             </select>
                         </div>
                         <div class="hidden sm:block">
-                            <nav class="flex space-x-4" aria-label="Tabs">
+                            <nav class="flex space-x-4 overflow-x-auto pb-2" aria-label="Tabs">
                                 <?php foreach (getSettingGroups() as $key => $name): ?>
-                                    <a href="#<?php echo $key; ?>" class="setting-tab px-3 py-2 font-medium text-sm rounded-md" data-tab="<?php echo $key; ?>">
+                                    <a href="#<?php echo $key; ?>" class="setting-tab whitespace-nowrap px-3 py-2 font-medium text-sm rounded-md text-gray-500 hover:text-gray-700" data-tab="<?php echo $key; ?>">
                                         <?php echo htmlspecialchars($name); ?>
                                     </a>
                                 <?php endforeach; ?>
@@ -229,7 +246,11 @@ include_once 'includes/admin_header.php';
                         <div id="tab-<?php echo $group; ?>" class="setting-content space-y-6" style="display: none;">
                             <h3 class="text-lg font-medium text-gray-900"><?php echo htmlspecialchars($groupName); ?></h3>
                             
-                            <?php foreach (getSettings($group) as $setting): ?>
+                            <?php
+                            // Get the settings for this group
+                            $groupSettings = getSettings($group);
+                            foreach ($groupSettings as $setting):
+                            ?>
                                 <div class="mb-4">
                                     <label for="settings-<?php echo $setting['setting_key']; ?>" class="block text-sm font-medium text-gray-700">
                                         <?php echo htmlspecialchars($setting['setting_description'] ?? $setting['setting_key']); ?>
@@ -237,66 +258,68 @@ include_once 'includes/admin_header.php';
                                     
                                     <?php if ($setting['setting_type'] === 'textarea'): ?>
                                         <textarea id="settings-<?php echo $setting['setting_key']; ?>" name="settings[<?php echo $setting['setting_key']; ?>]" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"><?php echo htmlspecialchars($setting['setting_value']); ?></textarea>
+                                        
+                                        <?php if (in_array($setting['setting_key'], ['ad_header', 'ad_footer', 'ad_sidebar'])): ?>
+                                            <p class="mt-1 text-xs text-gray-500"><?php echo $lang['ad_code_hint'] ?? 'Enter AdSense code or other ad HTML.'; ?></p>
+                                        <?php endif; ?>
 
-<!-- TODO - Powinno dodawać logo w zdjęciu -->
-                                        <?php elseif ($setting['setting_type'] === 'image'): ?>
-    <div class="mt-1">
-        <?php if (!empty($setting['setting_value'])): ?>
-            <div class="mb-2">
-                <img src="<?php echo htmlspecialchars($setting['setting_value']); ?>" alt="Current <?php echo htmlspecialchars($setting['setting_key']); ?>" class="h-16 object-contain">
-            </div>
-        <?php endif; ?>
-        <input type="file" id="<?php echo $setting['setting_key']; ?>" name="<?php echo $setting['setting_key']; ?>" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-        <input type="hidden" name="settings[<?php echo $setting['setting_key']; ?>]" value="<?php echo htmlspecialchars($setting['setting_value']); ?>">
-        <p class="mt-1 text-xs text-gray-500">Recommended size: 200px × 60px</p>
-    </div>
-
-
-    <div>
-    <label for="settings-meta_title" class="block text-sm font-medium text-gray-700">Meta Title</label>
-    <input type="text" id="settings-meta_title" name="settings[meta_title]" value="<?php echo htmlspecialchars($settings['meta_title'] ?? ''); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-</div>
-
-<div>
-    <label for="settings-meta_description" class="block text-sm font-medium text-gray-700">Meta Description</label>
-    <textarea id="settings-meta_description" name="settings[meta_description]" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"><?php echo htmlspecialchars($settings['meta_description'] ?? ''); ?></textarea>
-</div>
-
-
-<!-- TODO - poprawić wyświetlanie seo -->
-<div>
-    <label for="settings-meta_keywords" class="block text-sm font-medium text-gray-700">Meta Keywords</label>
-    <input type="text" id="settings-meta_keywords" name="settings[meta_keywords]" value="<?php echo htmlspecialchars($settings['meta_keywords'] ?? ''); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-    <p class="mt-1 text-xs text-gray-500">Comma separated keywords</p>
-</div>
-
-
-
-                                        <div>
-    <label for="settings-enable_registration" class="block text-sm font-medium text-gray-700">
-        Enable User Registration
-    </label>
-    <div class="mt-1">
-        <select id="settings-enable_registration" name="settings[enable_registration]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-            <option value="1" <?php echo ($settings['enable_registration'] ?? '1') === '1' ? 'selected' : ''; ?>>Enabled</option>
-            <option value="0" <?php echo ($settings['enable_registration'] ?? '1') === '0' ? 'selected' : ''; ?>>Disabled</option>
-        </select>
-    </div>
-</div>
+                                    <?php elseif ($setting['setting_type'] === 'image'): ?>
+                                        <div class="mt-1">
+                                            <?php if (!empty($setting['setting_value'])): ?>
+                                                <div class="mb-2">
+                                                    <img src="<?php echo htmlspecialchars($setting['setting_value']); ?>" alt="Current <?php echo htmlspecialchars($setting['setting_key']); ?>" class="h-16 object-contain">
+                                                </div>
+                                            <?php endif; ?>
+                                            <input type="file" id="<?php echo $setting['setting_key']; ?>" name="<?php echo $setting['setting_key']; ?>" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                            <input type="hidden" name="settings[<?php echo $setting['setting_key']; ?>]" value="<?php echo htmlspecialchars($setting['setting_value']); ?>">
+                                            
+                                            <?php if (in_array($setting['setting_key'], ['header_logo', 'footer_logo'])): ?>
+                                                <p class="mt-1 text-xs text-gray-500"><?php echo $lang['logo_size_hint'] ?? 'Recommended size: 200px × 60px'; ?></p>
+                                            <?php elseif ($setting['setting_key'] === 'social_image'): ?>
+                                                <p class="mt-1 text-xs text-gray-500"><?php echo $lang['social_image_hint'] ?? 'Recommended size: 1200px × 630px'; ?></p>
+                                            <?php endif; ?>
+                                        </div>
 
                                     <?php elseif ($setting['setting_type'] === 'boolean'): ?>
                                         <div class="mt-1">
                                             <select id="settings-<?php echo $setting['setting_key']; ?>" name="settings[<?php echo $setting['setting_key']; ?>]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                                <option value="1" <?php echo $setting['setting_value'] === '1' ? 'selected' : ''; ?>>Enabled</option>
-                                                <option value="0" <?php echo $setting['setting_value'] === '0' ? 'selected' : ''; ?>>Disabled</option>
+                                                <option value="1" <?php echo $setting['setting_value'] === '1' ? 'selected' : ''; ?>><?php echo $lang['enabled'] ?? 'Enabled'; ?></option>
+                                                <option value="0" <?php echo $setting['setting_value'] === '0' ? 'selected' : ''; ?>><?php echo $lang['disabled'] ?? 'Disabled'; ?></option>
                                             </select>
                                         </div>
                                     
                                     <?php elseif ($setting['setting_type'] === 'select' && $setting['setting_key'] === 'default_language'): ?>
                                         <div class="mt-1">
                                             <select id="settings-<?php echo $setting['setting_key']; ?>" name="settings[<?php echo $setting['setting_key']; ?>]" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                                <option value="en" <?php echo $setting['setting_value'] === 'en' ? 'selected' : ''; ?>>English</option>
-                                                <option value="pl" <?php echo $setting['setting_value'] === 'pl' ? 'selected' : ''; ?>>Polski</option>
+                                                <?php
+                                                // Get available languages from the database
+                                                try {
+                                                    $langStmt = $pdo->query("SELECT code, native_name FROM languages WHERE is_active = 1 ORDER BY is_default DESC, name");
+                                                    $languages = $langStmt->fetchAll(PDO::FETCH_ASSOC);
+                                                    
+                                                    foreach ($languages as $language): 
+                                                    ?>
+                                                        <option value="<?php echo $language['code']; ?>" <?php echo $setting['setting_value'] === $language['code'] ? 'selected' : ''; ?>>
+                                                            <?php echo $language['native_name']; ?>
+                                                        </option>
+                                                    <?php 
+                                                    endforeach;
+                                                    
+                                                    // If no languages are found in the database, provide default options
+                                                    if (empty($languages)): 
+                                                    ?>
+                                                        <option value="en" <?php echo $setting['setting_value'] === 'en' ? 'selected' : ''; ?>>English</option>
+                                                        <option value="pl" <?php echo $setting['setting_value'] === 'pl' ? 'selected' : ''; ?>>Polski</option>
+                                                    <?php 
+                                                    endif;
+                                                } catch (Exception $e) {
+                                                    // Fallback if database query fails
+                                                    ?>
+                                                    <option value="en" <?php echo $setting['setting_value'] === 'en' ? 'selected' : ''; ?>>English</option>
+                                                    <option value="pl" <?php echo $setting['setting_value'] === 'pl' ? 'selected' : ''; ?>>Polski</option>
+                                                <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     
@@ -323,23 +346,12 @@ include_once 'includes/admin_header.php';
                                             </select>
                                         </div>
                                     
-                                    <?php elseif ($setting['setting_type'] === 'image'): ?>
-                                        <div class="mt-1">
-                                            <?php if (!empty($setting['setting_value'])): ?>
-                                                <div class="mb-2">
-                                                    <img src="<?php echo htmlspecialchars($setting['setting_value']); ?>" alt="Current <?php echo htmlspecialchars($setting['setting_key']); ?>" class="h-16 object-contain">
-                                                </div>
-                                            <?php endif; ?>
-                                            <input type="file" id="<?php echo $setting['setting_key']; ?>" name="<?php echo $setting['setting_key']; ?>" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                                            <input type="hidden" name="settings[<?php echo $setting['setting_key']; ?>]" value="<?php echo htmlspecialchars($setting['setting_value']); ?>">
-                                        </div>
-                                    
                                     <?php else: ?>
                                         <input type="text" id="settings-<?php echo $setting['setting_key']; ?>" name="settings[<?php echo $setting['setting_key']; ?>]" value="<?php echo htmlspecialchars($setting['setting_value']); ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                                    <?php endif; ?>
-                                    
-                                    <?php if ($setting['setting_type'] === 'textarea' && in_array($setting['setting_key'], ['ad_header', 'ad_footer', 'ad_sidebar'])): ?>
-                                        <p class="mt-1 text-xs text-gray-500">Enter AdSense code or other ad HTML.</p>
+                                        
+                                        <?php if ($setting['setting_key'] === 'meta_keywords'): ?>
+                                            <p class="mt-1 text-xs text-gray-500"><?php echo $lang['meta_keywords_hint'] ?? 'Comma separated keywords'; ?></p>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
@@ -348,7 +360,7 @@ include_once 'includes/admin_header.php';
                     
                     <div class="flex justify-end mt-6">
                         <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Save Settings
+                            <?php echo $lang['save_settings'] ?? 'Save Settings'; ?>
                         </button>
                     </div>
                 </form>

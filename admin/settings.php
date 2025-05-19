@@ -52,7 +52,7 @@ try {
             ['header_logo', '', 'image', 'appearance', 'Header logo image'],
             ['footer_logo', '', 'image', 'appearance', 'Footer logo image'],
             ['social_image', '', 'image', 'social', 'Default social sharing image'],
-            ['copyright_text', '&copy; ' . date('Y') . ' ToolsOnline. All rights reserved.', 'textarea', 'general', 'Copyright text in footer'],
+            ['copyright_text', '&copy; ' . date('Y') . ' Goorky.com. All rights reserved.', 'textarea', 'general', 'Copyright text in footer'],
             ['maintenance_mode', '0', 'boolean', 'system', 'Site maintenance mode'],
             ['maintenance_message', 'The site is temporarily unavailable due to maintenance. We apologize for the inconvenience.', 'textarea', 'system', 'Maintenance mode message'],
             ['default_language', 'en', 'select', 'localization', 'Default site language'],

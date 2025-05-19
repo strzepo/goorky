@@ -99,6 +99,51 @@ try {
     <?php if (!empty($settings['google_analytics'])): ?>
         <?php echo $settings['google_analytics']; ?>
     <?php endif; ?>
+
+    <style>
+    /* Mobile menu styling */
+    .mobile-dropdown {
+        transform-origin: top;
+        transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    }
+    .mobile-dropdown.closed {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+    .mobile-dropdown.open {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+    .mobile-menu-container {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        background-color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+</style>
+
+    <script>
+    // Initialize Alpine.js for mobile menu
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('mobileNavigation', () => ({
+            mobileMenuOpen: false,
+            calculatorsOpen: false,
+            downloadersOpen: false,
+            toggleMenu() {
+                this.mobileMenuOpen = !this.mobileMenuOpen;
+            },
+            toggleCalculators() {
+                this.calculatorsOpen = !this.calculatorsOpen;
+            },
+            toggleDownloaders() {
+                this.downloadersOpen = !this.downloadersOpen;
+            }
+        }));
+    });
+</script>
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
     <!-- Header -->
@@ -114,14 +159,72 @@ try {
                     <?php endif; ?>
                 </a>
                 
-                <!-- Mobile menu button -->
+                <!-- Mobile menu button
                 <div class="md:hidden">
                     <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500 focus:outline-none">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </button>
-                </div>
+                </div> -->
+
+                <!-- Mobile menu -->
+<div x-data="{ mobileMenuOpen: false }" class="md:hidden">
+    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500 focus:outline-none">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+    
+    <!-- Mobile menu dropdown -->
+    <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="absolute top-full left-0 right-0 z-50 bg-white shadow-md mt-2 py-2 px-4">
+        <a href="/" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_home'] ?? 'Home'; ?></a>
+        
+        <div x-data="{ calculatorsOpen: false }">
+            <button @click="calculatorsOpen = !calculatorsOpen" class="flex w-full py-2 text-gray-600 hover:text-blue-600 justify-between items-center">
+                <span><?php echo $lang['menu_calculators'] ?? 'Calculators'; ?></span>
+                <svg class="ml-1 h-4 w-4 transition-transform" :class="{'rotate-180': calculatorsOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div x-show="calculatorsOpen" class="pl-4 space-y-2">
+                <a href="/bmi" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_bmi'] ?? 'BMI Calculator'; ?></a>
+                <a href="/calories" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_calories'] ?? 'Calorie Calculator'; ?></a>
+                <a href="/units" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_units'] ?? 'Unit Converter'; ?></a>
+                <a href="/dates" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_dates'] ?? 'Date Calculator'; ?></a>
+            </div>
+        </div>
+        
+        <a href="/password-generator" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_password'] ?? 'Password Generator'; ?></a>
+        
+        <div x-data="{ downloadersOpen: false }">
+            <button @click="downloadersOpen = !downloadersOpen" class="flex w-full py-2 text-gray-600 hover:text-blue-600 justify-between items-center">
+                <span><?php echo $lang['menu_downloaders'] ?? 'Downloaders'; ?></span>
+                <svg class="ml-1 h-4 w-4 transition-transform" :class="{'rotate-180': downloadersOpen}" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <div x-show="downloadersOpen" class="pl-4 space-y-2">
+                <a href="/youtube" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_youtube'] ?? 'YouTube'; ?></a>
+                <a href="/instagram" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_instagram'] ?? 'Instagram'; ?></a>
+                <a href="/facebook" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_facebook'] ?? 'Facebook'; ?></a>
+                <a href="/vimeo" class="block py-2 text-gray-600 hover:text-blue-600"><?php echo $lang['menu_vimeo'] ?? 'Vimeo'; ?></a>
+            </div>
+        </div>
+        
+        <div class="flex items-center justify-between pt-4 border-t mt-2">
+            <?php echo languageSwitcher(); ?>
+            
+            <?php if (!isset($settings['enable_registration']) || $settings['enable_registration'] == '1'): ?>
+            <a href="/admin/login.php" title="<?php echo $lang['login'] ?? 'Login'; ?>" class="text-gray-600 hover:text-blue-600">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </a>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
                 
                 <!-- Desktop menu -->
                 <nav class="hidden md:flex space-x-8 items-center">

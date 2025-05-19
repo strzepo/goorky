@@ -57,21 +57,23 @@ function getBMICategory($bmi) {
     global $lang;
 
     if ($bmi < 16) {
-        return [$lang['bmi_severely_underweight'], 'text-red-700'];
+        return [$lang['bmi_severely_underweight'] ?? 'Severely underweight', 'text-red-700'];
     } elseif ($bmi < 17) {
-        return [$lang['bmi_underweight'], 'text-red-600'];
+        return [$lang['bmi_underweight'] ?? 'Underweight', 'text-red-600'];
     } elseif ($bmi < 18.5) {
-        return [$lang['bmi_mildly_underweight'], 'text-yellow-600'];
+        return [$lang['bmi_mildly_underweight'] ?? 'Mildly underweight', 'text-yellow-600'];
     } elseif ($bmi < 25) {
-        return [$lang['bmi_normal'], 'text-green-600'];
+        return [$lang['bmi_normal'] ?? 'Normal', 'text-green-600'];
     } elseif ($bmi < 30) {
-        return [$lang['bmi_overweight'], 'text-yellow-600'];
+        return [$lang['bmi_overweight'] ?? 'Overweight', 'text-yellow-600'];
     } elseif ($bmi < 35) {
-        return [$lang['bmi_obesity_1'], 'text-red-500'];
+        return [$lang['bmi_obesity_1'] ?? 'Obesity class I', 'text-red-500'];
     } elseif ($bmi < 40) {
-        return [$lang['bmi_obesity_2'], 'text-red-600'];
+        return [$lang['bmi_obesity_2'] ?? 'Obesity class II', 'text-red-600'];
     } else {
-        return [$lang['bmi_obesity_3'], 'text-red-700'];
+        // Sprawdzamy oba możliwe klucze dla otyłości III stopnia
+        $obesityLabel = $lang['bmi_obesity_3'] ?? $lang['bmi_obesity_class_3'] ?? 'Obesity class III';
+        return [$obesityLabel, 'text-red-700'];
     }
 }
 

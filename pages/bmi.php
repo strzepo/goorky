@@ -65,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_type']) && $_P
         </div>
         
         <div class="bg-gray-100 p-4 rounded-lg">
+            <!-- BMI indicator bar -->
             <div class="relative h-8 mb-4">
                 <div class="absolute inset-0 flex">
                     <div class="flex-1 bg-blue-700 rounded-l-full"></div>
@@ -74,20 +75,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_type']) && $_P
                     <div class="flex-1 bg-red-600 rounded-r-full"></div>
                 </div>
                 
-                <!-- Wskaźnik BMI -->
-                <?php
-                $position = 0;
-                if ($bmi <= 16) {
-                    $position = 0;
-                } elseif ($bmi >= 40) {
-                    $position = 100;
-                } else {
-                    // Mapowanie BMI od 16 do 40 na pozycję od 0% do 100%
-                    $position = (($bmi - 16) / (40 - 16)) * 100;
-                }
-                ?>
-                <div class="absolute h-10 w-4 bg-gray-800 rounded-full" style="left: <?php echo $position; ?>%; top: -5px; transform: translateX(-50%);"></div>
-            </div>
+                 <!-- Wskaźnik BMI -->
+    <?php
+    $position = 0;
+    if ($bmi <= 16) {
+        $position = 0;
+    } elseif ($bmi >= 40) {
+        $position = 100;
+    } else {
+        // Mapowanie BMI od 16 do 40 na pozycję od 0% do 100%
+        $position = (($bmi - 16) / (40 - 16)) * 100;
+    }
+    ?>
+    <div class="absolute h-10 w-4 bg-gray-800 rounded-full" style="left: <?php echo $position; ?>%; top: -5px; transform: translateX(-50%);"></div>
+</div>  
             
             <div class="flex justify-between text-xs text-gray-600">
                 <span>16</span>

@@ -553,9 +553,9 @@ $lang = [
     'facebook_short_desc' => 'Pobieraj publiczne filmy z Facebooka.',
     'vimeo_short_desc' => 'Pobieraj filmy z Vimeo w wysokiej rozdzielczości.',
 
-    'popup_message' => 'Enjoyed this tool? Share it or buy me a coffee ☕!',
-  'buy_me_coffee' => 'Buy me a coffee',
-  'continue_action' => 'Continue',
+    'popup_message' => 'Spodobało Ci się to narzędzie? Udostępnij je lub kup mi kawę ☕!',
+  'buy_me_coffee' => 'Kup mi kawę',
+  'continue_action' => 'Kontynuuj',
 
   'bmi_severely_underweight' => 'Wygłodzenie',
   'bmi_mildly_underweight' => 'Niedowaga',

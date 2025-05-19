@@ -49,26 +49,36 @@ try {
         echo "<meta name=\"msvalidate.01\" content=\"" . htmlspecialchars($bing_site_verification) . "\">\n";
     }
     
+    // Canonical URL
+    $canonicalUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    echo "<link rel=\"canonical\" href=\"" . htmlspecialchars($canonicalUrl) . "\">\n";
+    
     // Open Graph tags
     echo "<meta property=\"og:title\" content=\"" . htmlspecialchars($meta_title) . "\">\n";
     echo "<meta property=\"og:description\" content=\"" . htmlspecialchars($meta_description) . "\">\n";
     echo "<meta property=\"og:type\" content=\"website\">\n";
+    echo "<meta property=\"og:url\" content=\"" . htmlspecialchars($canonicalUrl) . "\">\n";
+    echo "<meta property=\"og:image\" content=\"" . (!empty($settings['social_image']) ? htmlspecialchars($settings['social_image']) : 'https://goorky.com/assets/images/social-cover.jpg') . "\">\n";
+    echo "<meta property=\"og:image:width\" content=\"1200\">\n";
+    echo "<meta property=\"og:image:height\" content=\"630\">\n";
+    echo "<meta property=\"og:locale\" content=\"" . ($_SESSION['language'] ?? 'en') . "\">\n";
+    echo "<meta property=\"og:site_name\" content=\"" . htmlspecialchars($settings['site_name'] ?? 'ToolsOnline') . "\">\n";
     
     // Twitter Card tags
-    echo "<meta name=\"twitter:card\" content=\"summary\">\n";
+    echo "<meta name=\"twitter:card\" content=\"summary_large_image\">\n";
     echo "<meta name=\"twitter:title\" content=\"" . htmlspecialchars($meta_title) . "\">\n";
     echo "<meta name=\"twitter:description\" content=\"" . htmlspecialchars($meta_description) . "\">\n";
+    echo "<meta name=\"twitter:image\" content=\"" . (!empty($settings['social_image']) ? htmlspecialchars($settings['social_image']) : 'https://goorky.com/assets/images/social-cover.jpg') . "\">\n";
     
-
-    // Canonical URL
-    $canonicalUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    echo "<link rel=\"canonical\" href=\"" . htmlspecialchars($canonicalUrl) . "\">\n";   
+    if (!empty($settings['twitter_site'])) {
+        echo "<meta name=\"twitter:site\" content=\"@" . htmlspecialchars($settings['twitter_site']) . "\">\n";
+    }
     ?>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+
     <!-- TailwindCSS -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.3/dist/cdn.min.js" defer></script>

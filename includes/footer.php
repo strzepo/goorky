@@ -116,9 +116,9 @@ if ((!isset($settings['show_ads']) || $settings['show_ads'] == '1') && !empty($s
       </a>
     </div>
 
-    <!-- Potwierdzenie -->
-    <button id="cta-submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-medium transition">
-      <?php echo $lang['continue_action'] ?? 'Continue'; ?>
+    <!-- Potwierdzenie z timerem -->
+    <button id="cta-submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-medium transition" disabled>
+      <?php echo $lang['continue_action'] ?? 'Continue'; ?> (30s)
     </button>
   </div>
 </div>
@@ -131,6 +131,45 @@ document.addEventListener('DOMContentLoaded', function () {
     let activeForm = null;
     const popup = document.getElementById('cta-popup');
     const popupSubmit = document.getElementById('cta-submit');
+    const continueText = popupSubmit.textContent.split('(')[0].trim();
+    let timeLeft = 15;
+    let countdownTimer = null;
+    
+    // Funkcja rozpoczynająca odliczanie
+    function startCountdown() {
+        // Zablokuj przycisk na początku
+        popupSubmit.disabled = true;
+        timeLeft = 15;
+        
+        // Aktualizacja tekstu przycisku z czasem
+        popupSubmit.textContent = `${continueText} (${timeLeft}s)`;
+        
+        // Uruchomienie timera
+        countdownTimer = setInterval(function() {
+            timeLeft--;
+            popupSubmit.textContent = `${continueText} (${timeLeft}s)`;
+            
+            if (timeLeft <= 0) {
+                // Zatrzymaj timer i odblokuj przycisk po zakończeniu odliczania
+                clearInterval(countdownTimer);
+                popupSubmit.disabled = false;
+                popupSubmit.textContent = continueText;
+            }
+        }, 1000);
+    }
+    
+    // Czyszczenie timera przy zamknięciu popupu
+    function resetCountdown() {
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+    }
+    
+    // Obsługa przycisku zamknięcia
+    document.querySelector('#cta-popup button:first-child').addEventListener('click', function() {
+        resetCountdown();
+    });
 
     document.querySelectorAll('.trigger-popup').forEach(button => {
         button.addEventListener('click', function (e) {
@@ -145,12 +184,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             activeForm = form;
             popup.style.display = 'flex';
+            startCountdown(); // Rozpocznij odliczanie po otwarciu popupu
         });
     });
 
     popupSubmit.addEventListener('click', function () {
-        popup.style.display = 'none';
-        if (activeForm) {
+        if (!popupSubmit.disabled && activeForm) {
+            resetCountdown();
+            popup.style.display = 'none';
             activeForm.submit();
         }
     });

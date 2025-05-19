@@ -192,7 +192,6 @@ $lang = [
     'days' => 'days',
     'weeks' => 'weeks',
     'months' => 'months',
-    'years' => 'years',
     'from' => 'From',
     'to' => 'to',
     'is' => 'is',
@@ -551,5 +550,15 @@ $lang = [
     'youtube_short_desc' => 'Download videos from YouTube.',
     'instagram_short_desc' => 'Download photos and videos from Instagram.',
     'facebook_short_desc' => 'Download public videos from Facebook.',
-    'vimeo_short_desc' => 'Download videos from Vimeo in high definition.'
+    'vimeo_short_desc' => 'Download videos from Vimeo in high definition.',
+
+   'popup_message' => 'Enjoyed this tool? Share it or buy me a coffee ☕!',
+    'buy_me_coffee' => 'Buy me a coffee',
+    'continue_action' => 'Continue',
+
+    'bmi_severely_underweight' => 'Severely underweight',
+    'bmi_mildly_underweight' => 'Mildly underweight',
+    'bmi_obesity_1' => 'Obesity class I',
+    'bmi_obesity_2' => 'Obesity class II',
+    'bmi_obesity_3' => 'Obesity class III',
 ];

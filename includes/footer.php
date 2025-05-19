@@ -79,11 +79,82 @@ if ((!isset($settings['show_ads']) || $settings['show_ads'] == '1') && !empty($s
                 <p><?php echo $settings['copyright_text'] ?? ('&copy; ' . date('Y') . ' ToolsOnline. ' . ($lang['footer_rights'] ?? 'All rights reserved.')); ?></p>
             </div>
         </div>
+<!-- CTA Popup -->
+<div id="cta-popup" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" style="display: none;">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md p-6 relative text-center">
+    
+    <!-- Zamknięcie -->
+    <button onclick="document.getElementById('cta-popup').style.display='none'" 
+            class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-xl font-bold">&times;</button>
+
+    <!-- Treść popupu -->
+    <p class="text-gray-800 dark:text-gray-200 mb-4 font-medium">
+      <?php echo $lang['popup_message'] ?? 'Enjoyed this tool? Share it or buy me a coffee ☕!'; ?>
+    </p>
+
+    <!-- Social Media -->
+    <div class="flex text-gray-800 justify-center gap-4 mb-4 text-2xl">
+      <a href="https://x.com/intent/tweet?text=Check+this+awesome+tool:+https://goorky.com" target="_blank" aria-label="Share on X" class="hover:text-blue-500"><i class="fab fa-x-twitter"></i></a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://goorky.com" target="_blank" aria-label="Share on Facebook" class="hover:text-blue-600"><i class="fab fa-facebook"></i></a>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://goorky.com" target="_blank" aria-label="Share on LinkedIn" class="hover:text-blue-700"><i class="fab fa-linkedin"></i></a>
+      <a href="https://api.whatsapp.com/send?text=https://goorky.com" target="_blank" aria-label="Share on WhatsApp" class="hover:text-green-500"><i class="fab fa-whatsapp"></i></a>
+      <a href="https://t.me/share/url?url=https://goorky.com" target="_blank" aria-label="Share on Telegram" class="hover:text-blue-400"><i class="fab fa-telegram"></i></a>
+      <a href="https://www.reddit.com/submit?url=https://goorky.com"  target="_blank" aria-label="Share on Reddit" 
+   class="hover:text-red-500"><i class="fab fa-reddit"></i></a>
+    </div>
+    <!-- Separator -->
+<div class="flex items-center justify-center my-4 text-gray-400 text-sm">
+  <span class="border-b border-gray-300 flex-grow mr-2"></span>
+  <span class="uppercase font-medium tracking-wide">or</span>
+  <span class="border-b border-gray-300 flex-grow ml-2"></span>
+</div>
+
+    <!-- Buy coffee -->
+    <div class="mb-4">
+      <a href="https://buycoffee.to/lukson" target="_blank" class="text-yellow-600 font-semibold hover:underline">
+        ☕ <?php echo $lang['buy_me_coffee'] ?? 'Buy me a coffee'; ?>
+      </a>
+    </div>
+
+    <!-- Potwierdzenie -->
+    <button id="cta-submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-medium transition">
+      <?php echo $lang['continue_action'] ?? 'Continue'; ?>
+    </button>
+  </div>
+</div>
     </footer>
     
     <!-- Additional scripts -->
-    <script>
-        // Additional JavaScript can be placed here
-    </script>
+     <!-- Popup - Call to actions  -->
+     <script>
+document.addEventListener('DOMContentLoaded', function () {
+    let activeForm = null;
+    const popup = document.getElementById('cta-popup');
+    const popupSubmit = document.getElementById('cta-submit');
+
+    document.querySelectorAll('.trigger-popup').forEach(button => {
+        button.addEventListener('click', function (e) {
+            const form = button.closest('form');
+            if (!form) return;
+
+            e.preventDefault();
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            activeForm = form;
+            popup.style.display = 'flex';
+        });
+    });
+
+    popupSubmit.addEventListener('click', function () {
+        popup.style.display = 'none';
+        if (activeForm) {
+            activeForm.submit();
+        }
+    });
+});
+</script>
 </body>
 </html>

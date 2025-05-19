@@ -12,7 +12,7 @@ $categoryColor = '';
 $hasResult = false;
 
 // Obsługa przesłanego formularza
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_bmi'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_type']) && $_POST['action_type'] === 'calculate_bmi') {
     // Pobranie i walidacja danych
     $weight = sanitizeNumber($_POST['weight'] ?? '');
     $height = sanitizeNumber($_POST['height'] ?? '');
@@ -35,21 +35,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_bmi'])) {
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
         <p class="mb-4"><?php echo $lang['bmi_intro_text'] ?? 'BMI (Body Mass Index) is an indicator that helps assess whether your weight is appropriate for your height. Calculate your BMI now!'; ?></p>
         
-        <form method="POST" action="/bmi" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="weight" class="block text-gray-700 font-medium mb-2"><?php echo $lang['weight_kg'] ?? 'Weight (kg)'; ?></label>
-                    <input type="number" name="weight" id="weight" min="20" max="300" step="0.1" value="<?php echo htmlspecialchars($weight); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="<?php echo $lang['weight_placeholder'] ?? 'e.g. 70.5'; ?>">
-                </div>
-                <div>
-                    <label for="height" class="block text-gray-700 font-medium mb-2"><?php echo $lang['height_cm'] ?? 'Height (cm)'; ?></label>
-                    <input type="number" name="height" id="height" min="50" max="250" step="0.1" value="<?php echo htmlspecialchars($height); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="<?php echo $lang['height_placeholder'] ?? 'e.g. 175'; ?>">
-                </div>
-            </div>
-            <div class="text-center">
-                <button type="submit" name="calculate_bmi" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate_bmi'] ?? 'Calculate BMI'; ?></button>
-            </div>
-        </form>
+        <form id="bmiForm" method="POST" action="/bmi" class="space-y-6">
+    <input type="hidden" name="action_type" value="calculate_bmi">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <label for="weight" class="block text-gray-700 font-medium mb-2"><?php echo $lang['weight_kg'] ?? 'Weight (kg)'; ?></label>
+            <input type="number" name="weight" id="weight" min="20" max="300" step="0.1" value="<?php echo htmlspecialchars($weight); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="<?php echo $lang['weight_placeholder'] ?? 'e.g. 70.5'; ?>">
+        </div>
+        <div>
+            <label for="height" class="block text-gray-700 font-medium mb-2"><?php echo $lang['height_cm'] ?? 'Height (cm)'; ?></label>
+            <input type="number" name="height" id="height" min="50" max="250" step="0.1" value="<?php echo htmlspecialchars($height); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="<?php echo $lang['height_placeholder'] ?? 'e.g. 175'; ?>">
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="button" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+            <?php echo $lang['calculate_bmi'] ?? 'Calculate BMI'; ?>
+        </button>
+    </div>
+</form>
     </div>
     
     <?php if ($hasResult): ?>

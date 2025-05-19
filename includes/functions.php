@@ -4,6 +4,10 @@
  * @author Goorky.com
  * @version 1.0
  */
+// Załaduj język
+$locale = $_GET['lang'] ?? 'en';
+$langFile = __DIR__ . "/lang/{$locale}.php";
+$lang = file_exists($langFile) ? include $langFile : include __DIR__ . '/lang/en.php';
 
 /**
  * Czyści dane wejściowe, chroniąc przed atakami XSS
@@ -44,27 +48,30 @@ function calculateBMI($weight, $height) {
 }
 
 /**
- * Zwraca kategorię BMI na podstawie wartości BMI
- * @param float $bmi Wartość BMI
- * @return string Kategoria BMI
+ * Returns translated BMI category label and CSS class
+ *
+ * @param float $bmi
+ * @return array{0: string, 1: string}
  */
 function getBMICategory($bmi) {
+    global $lang;
+
     if ($bmi < 16) {
-        return ['Wygłodzenie', 'text-red-700'];
+        return [$lang['bmi_severely_underweight'], 'text-red-700'];
     } elseif ($bmi < 17) {
-        return ['Wychudzenie', 'text-red-600'];
+        return [$lang['bmi_underweight'], 'text-red-600'];
     } elseif ($bmi < 18.5) {
-        return ['Niedowaga', 'text-yellow-600'];
+        return [$lang['bmi_mildly_underweight'], 'text-yellow-600'];
     } elseif ($bmi < 25) {
-        return ['Prawidłowa waga', 'text-green-600'];
+        return [$lang['bmi_normal'], 'text-green-600'];
     } elseif ($bmi < 30) {
-        return ['Nadwaga', 'text-yellow-600'];
+        return [$lang['bmi_overweight'], 'text-yellow-600'];
     } elseif ($bmi < 35) {
-        return ['Otyłość I stopnia', 'text-red-500'];
+        return [$lang['bmi_obesity_1'], 'text-red-500'];
     } elseif ($bmi < 40) {
-        return ['Otyłość II stopnia', 'text-red-600'];
+        return [$lang['bmi_obesity_2'], 'text-red-600'];
     } else {
-        return ['Otyłość III stopnia', 'text-red-700'];
+        return [$lang['bmi_obesity_3'], 'text-red-700'];
     }
 }
 

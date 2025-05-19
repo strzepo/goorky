@@ -551,5 +551,15 @@ $lang = [
     'youtube_short_desc' => 'Pobieraj filmy z YouTube.',
     'instagram_short_desc' => 'Pobieraj zdjęcia i filmy z Instagrama.',
     'facebook_short_desc' => 'Pobieraj publiczne filmy z Facebooka.',
-    'vimeo_short_desc' => 'Pobieraj filmy z Vimeo w wysokiej rozdzielczości.'
+    'vimeo_short_desc' => 'Pobieraj filmy z Vimeo w wysokiej rozdzielczości.',
+
+    'popup_message' => 'Enjoyed this tool? Share it or buy me a coffee ☕!',
+  'buy_me_coffee' => 'Buy me a coffee',
+  'continue_action' => 'Continue',
+
+  'bmi_severely_underweight' => 'Wygłodzenie',
+  'bmi_mildly_underweight' => 'Niedowaga',
+  'bmi_obesity_1' => 'Otyłość I stopnia',
+  'bmi_obesity_2' => 'Otyłość II stopnia',
+  'bmi_obesity_3' => 'Otyłość III stopnia',
 ];

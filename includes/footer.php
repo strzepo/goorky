@@ -126,7 +126,7 @@ if ((!isset($settings['show_ads']) || $settings['show_ads'] == '1') && !empty($s
     
     <!-- Additional scripts -->
      <!-- Popup - Call to actions  -->
-     <script>
+     <!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     let activeForm = null;
     const popup = document.getElementById('cta-popup');
@@ -196,6 +196,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
-</script>
+</script> -->
 </body>
 </html>

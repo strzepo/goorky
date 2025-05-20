@@ -562,4 +562,42 @@ $lang = [
   'bmi_obesity_1' => 'Otyłość I stopnia',
   'bmi_obesity_2' => 'Otyłość II stopnia',
   'bmi_obesity_3' => 'Otyłość III stopnia',
+
+  'confirm_action' => 'Potwierdź akcję',
+  'confirm_bmi' => 'Potwierdź obliczenie BMI',
+  'confirm_calories' => 'Potwierdź obliczenie kalorii',
+  'confirm_dates' => 'Potwierdź obliczenie dat',
+  'confirm_units' => 'Potwierdź konwersję jednostek',
+  'confirm_password' => 'Potwierdź generowanie hasła',
+  'confirm_download' => 'Potwierdź żądanie pobrania',
+  'please_confirm' => 'Potwierdź, że chcesz wykonać operację z następującymi parametrami:',
+  'by_clicking' => 'Kliknij "Potwierdź", aby wykonać obliczenie.',
+  'confirm_button' => 'Potwierdź',
+  'cancel_button' => 'Anuluj',
+  'share_text' => 'Jeśli lubisz nasze narzędzia, podziel się nimi ze znajomymi!',
+  'or' => 'lub',
+  'share_message' => 'Sprawdź to świetne narzędzie:',
+
+  
+  // Nazwy pól formularzy
+  'field_weight' => 'Waga',
+  'field_height' => 'Wzrost',
+  'field_age' => 'Wiek',
+  'field_gender' => 'Płeć',
+  'field_activity' => 'Aktywność',
+  'field_length' => 'Długość',
+  'field_use_special' => 'Znaki specjalne',
+  'field_use_numbers' => 'Cyfry',
+  'field_use_upper' => 'Wielkie litery',
+  'field_use_lower' => 'Małe litery',
+  'field_value' => 'Wartość',
+  'field_from' => 'Z jednostki',
+  'field_to' => 'Do jednostki',
+  'field_type' => 'Typ',
+  'field_url' => 'Adres URL',
+  
+  // Wartości pól
+  'type_length' => 'Długość',
+  'type_weight' => 'Waga',
+  'type_temperature' => 'Temperatura',
 ];

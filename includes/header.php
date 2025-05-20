@@ -85,7 +85,8 @@ try {
     
     <!-- Custom CSS -->
     <link href="/assets/css/styles.css" rel="stylesheet">
-    
+    <link href="/assets/css/popup.css" rel="stylesheet">
+
     <!-- Favicon -->
     <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
     
@@ -94,6 +95,7 @@ try {
     
     <!-- Additional scripts -->
     <script src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/popup.js" defer></script>
     
     <!-- Google Analytics -->
     <?php if (!empty($settings['google_analytics'])): ?>
@@ -144,6 +146,30 @@ try {
         }));
     });
 </script>
+<?php
+// Lista kluczy tłumaczeń potrzebnych dla popupów
+$popupTranslationKeys = [
+    'confirm_action', 'confirm_bmi', 'confirm_calories', 'confirm_dates', 
+    'confirm_units', 'confirm_password', 'confirm_download', 'please_confirm', 
+    'by_clicking', 'confirm_button', 'cancel_button', 'share_text', 'or', 
+    'buy_me_coffee', 'share_message', 'yes', 'no', 'weight', 'height', 
+    'age', 'gender', 'male', 'female', 'activity', 'sedentary', 'light', 
+    'moderate', 'active', 'very_active', 'length', 'use_special', 'use_numbers', 
+    'use_upper', 'use_lower', 'value', 'from', 'to', 'type', 'length_type', 
+    'weight_type', 'temperature_type', 'url'
+];
+
+// Zbierz potrzebne tłumaczenia z tablicy $lang (która jest już załadowana z pliku językowego)
+$popupTranslations = [];
+foreach ($popupTranslationKeys as $key) {
+    $popupTranslations[$key] = $lang[$key] ?? null;
+}
+
+// Przekaż tłumaczenia do JavaScript jako zmienną globalną
+echo "<script>\n";
+echo "window.translations = " . json_encode($popupTranslations, JSON_HEX_APOS | JSON_HEX_QUOT) . ";\n";
+echo "</script>\n";
+?>
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
     <!-- Header -->
@@ -158,15 +184,6 @@ try {
                         <span class="text-2xl font-bold text-blue-600"><?php echo htmlspecialchars($settings['site_name'] ?? 'ToolsOnline'); ?></span>
                     <?php endif; ?>
                 </a>
-                
-                <!-- Mobile menu button
-                <div class="md:hidden">
-                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-gray-500 focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                </div> -->
 
                 <!-- Mobile menu -->
 <div x-data="{ mobileMenuOpen: false }" class="md:hidden">

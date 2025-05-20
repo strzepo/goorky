@@ -211,7 +211,8 @@ function getUnitSymbol($unit) {
             </div>
             
             <div class="text-center">
-                <button type="submit" name="convert_units" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['convert'] ?? 'Convert'; ?></button>
+                <button type="button" name="convert_units" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['convert'] ?? 'Convert'; ?></button>
+
             </div>
         </form>
     </div>

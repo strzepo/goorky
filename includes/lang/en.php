@@ -561,4 +561,42 @@ $lang = [
     'bmi_obesity_1' => 'Obesity class I',
     'bmi_obesity_2' => 'Obesity class II',
     'bmi_obesity_3' => 'Obesity class III',
+
+    // Popup translations
+    'confirm_action' => 'Confirm Action',
+    'confirm_bmi' => 'Confirm BMI Calculation',
+    'confirm_calories' => 'Confirm Calorie Calculation',
+    'confirm_dates' => 'Confirm Date Calculation',
+    'confirm_units' => 'Confirm Unit Conversion',
+    'confirm_password' => 'Confirm Password Generation',
+    'confirm_download' => 'Confirm Download Request',
+    'please_confirm' => 'Please confirm that you want to proceed with the following parameters:',
+    'by_clicking' => 'By clicking "Confirm", the calculation will be performed.',
+    'confirm_button' => 'Confirm',
+    'cancel_button' => 'Cancel',
+    'share_text' => 'If you like our tools, please share with your friends!',
+    'or' => 'or',
+    'share_message' => 'Check this awesome tool:',
+    
+    // Form field names
+    'field_weight' => 'Weight',
+    'field_height' => 'Height',
+    'field_age' => 'Age',
+    'field_gender' => 'Gender',
+    'field_activity' => 'Activity',
+    'field_length' => 'Length',
+    'field_use_special' => 'Special characters',
+    'field_use_numbers' => 'Numbers',
+    'field_use_upper' => 'Uppercase letters',
+    'field_use_lower' => 'Lowercase letters',
+    'field_value' => 'Value',
+    'field_from' => 'From unit',
+    'field_to' => 'To unit',
+    'field_type' => 'Type',
+    'field_url' => 'URL',
+    
+    // Field values
+    'type_length' => 'Length',
+    'type_weight' => 'Weight',
+    'type_temperature' => 'Temperature',
 ];

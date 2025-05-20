@@ -135,7 +135,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
                 </div>
                 
                 <div class="text-center">
-                    <button type="submit" name="calculate_dates" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate'] ?? 'Calculate'; ?></button>
+                     <button type="button" name="calculate_dates" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate'] ?? 'Calculate'; ?></button>
                 </div>
             </form>
         </div>

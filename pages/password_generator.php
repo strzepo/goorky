@@ -118,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_password']))
             </div>
             
             <div class="text-center">
-                <button type="submit" name="generate_password" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['generate_password'] ?? 'Generate password'; ?></button>
+                 <button type="button" name="generate_password" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['generate_password'] ?? 'Generate password'; ?></button>
+
             </div>
         </form>
     </div>

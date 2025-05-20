@@ -47,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])
             </div>
             
             <div class="text-center">
-                <button type="submit" name="download_instagram" class="bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+                <button type="button" name="download_instagram" class="trigger-popup bg-purple-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-purple-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+
             </div>
         </form>
         

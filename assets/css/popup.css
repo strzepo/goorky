@@ -1,0 +1,72 @@
+/* Animacje popupów */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+#popup-container {
+    animation: fadeIn 0.2s ease-out;
+}
+
+#popup-content {
+    animation: slideIn 0.3s ease-out;
+}
+
+/* Style dla przycisków social media */
+#social-share-section a {
+    transition: transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#social-share-section a:hover {
+    transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Style dla przycisku z odliczaniem */
+#confirm-popup:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#countdown-timer {
+    font-weight: bold;
+}
+
+/* Responsywność na urządzeniach mobilnych */
+@media (max-width: 640px) {
+    #popup-content {
+        width: 90%;
+        margin: 10px;
+    }
+
+    #social-share-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #social-share-section a {
+        margin-bottom: 8px;
+    }
+}

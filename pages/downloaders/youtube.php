@@ -43,7 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_youtube'])) 
             </div>
             
             <div class="text-center">
-                <button type="submit" name="download_youtube" class="bg-red-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-red-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+                <button type="button" name="download_youtube" class="trigger-popup bg-red-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-red-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+
             </div>
         </form>
         

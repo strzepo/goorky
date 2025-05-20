@@ -103,8 +103,8 @@ function getActivityDescription($activity) {
             </div>
             
             <div class="text-center">
-                <button type="submit" name="calculate_calories" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate_calories'] ?? 'Calculate Calories'; ?></button>
-            </div>
+                <button type="button" name="calculate_calories" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate_calories'] ?? 'Calculate calories'; ?></button>
+            </div>  
         </form>
     </div>
     

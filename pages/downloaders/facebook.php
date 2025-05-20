@@ -66,7 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
             </div>
             
             <div class="text-center">
-                <button type="submit" name="download_facebook" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+                <button type="button" name="download_facebook" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+
             </div>
         </form>
         

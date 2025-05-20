@@ -56,7 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_vimeo'])) {
             </div>
             
             <div class="text-center">
-                <button type="submit" name="download_vimeo" class="bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-teal-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+                 <button type="button" name="download_vimeo" class="trigger-popup bg-indigo-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-teal-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
+
             </div>
         </form>
         

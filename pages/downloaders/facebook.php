@@ -1,48 +1,37 @@
 <?php
-function getFacebookVideoDirectUrl($fbUrl) {
-    $escapedUrl = escapeshellarg($fbUrl);
-    $scriptPath = realpath(__DIR__ . '/../../../scripts/fb_scraper.js');
-
-    if (!$scriptPath) {
-        return ''; // Script not found
-    }
-
-    $command = "node " . escapeshellarg($scriptPath) . " $escapedUrl";
-    $output = shell_exec($command);
-    return trim($output);
-}
-// Setting page title and description
+// Ustawienie tytułu i opisu strony
 $pageTitle = $lang['facebook_page_title'] ?? 'Facebook Downloader - Download Facebook Videos | Goorky.com';
 $pageDescription = $lang['facebook_page_description'] ?? 'Free Facebook Downloader - download public videos from Facebook in high quality. Easy to use, no registration or installation required.';
 
-// Initialize variables
+// Inicjalizacja zmiennych
 $url = '';
 $hasResult = false;
 $errorMessage = '';
 $videoId = '';
-$directVideoUrl = '';
+$downloadLinks = null;
 
-// Handle submitted form
+// Dołączenie funkcji do pobierania filmów z Facebooka
+require_once __DIR__ . '/../../includes/facebook-downloader.php';
+
+// Obsługa przesłanego formularza
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook'])) {
-    // Get and validate data
+    // Pobranie i walidacja danych
     $url = sanitizeInput($_POST['url'] ?? '');
     
-    // Check if URL is valid
+    // Sprawdzenie czy URL jest poprawny
     if (filter_var($url, FILTER_VALIDATE_URL)) {
-        // Check if it's a Facebook link
+        // Sprawdzenie czy to link do Facebooka
         if (strpos($url, 'facebook.com') !== false || strpos($url, 'fb.watch') !== false) {
-            // Try to extract video ID
-            $videoId = getFacebookVideoId($url);
             
-            if ($videoId) {
+            // Pobranie linków do filmu
+            $downloadLinks = getVideoLinks($url);
+            
+            if ($downloadLinks && (!empty($downloadLinks['hd']) || !empty($downloadLinks['sd']))) {
                 $hasResult = true;
-                $directVideoUrl = getFacebookVideoDirectUrl($url);
-                if (!$directVideoUrl) {
-                    $errorMessage = $lang['failed_get_video_link'] ?? 'Failed to get video link.';
-                    $hasResult = false;
-                }
+                // Próba uzyskania video ID (opcjonalnie)
+                $videoId = getFacebookVideoId($url);
             } else {
-                $errorMessage = $lang['failed_identify_video'] ?? 'Failed to identify the video. Make sure the link points to a public Facebook video.';
+                $errorMessage = $lang['failed_get_video_link'] ?? 'Failed to get video link.';
             }
         } else {
             $errorMessage = $lang['not_facebook_url'] ?? 'The URL provided is not a Facebook link.';
@@ -66,8 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
             </div>
             
             <div class="text-center">
-                <button type="button" name="download_facebook" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['download'] ?? 'Download'; ?></button>
-
+                <button type="submit" name="download_facebook" class="bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition">
+                    <?php echo $lang['download'] ?? 'Download'; ?>
+                </button>
             </div>
         </form>
         
@@ -79,79 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
     </div>
     
     <?php if ($hasResult): ?>
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['found_video'] ?? 'Found Video'; ?></h2>
-        
-        <div class="flex flex-col md:flex-row mb-6">
-            <div class="md:w-1/2 mb-4 md:mb-0 md:mr-6">
-                <div class="bg-gray-100 rounded-lg overflow-hidden">
-                    <div class="aspect-w-16 aspect-h-9">
-                        <div class="w-full h-full bg-gray-800 flex items-center justify-center text-white">
-                            <div class="text-center">
-                                <svg class="h-16 w-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <p class="mt-2"><?php echo $lang['facebook_video_preview'] ?? 'Facebook Video Preview'; ?></p>
-                                <p class="mt-1 text-gray-400"><?php echo $lang['video_id'] ?? 'Video ID:'; ?> <?php echo htmlspecialchars($videoId); ?></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="md:w-1/2">
-                <div class="bg-yellow-50 p-4 rounded-lg text-yellow-800 mb-4">
-                    <strong><?php echo $lang['note'] ?? 'Note:'; ?></strong> <?php echo $lang['facebook_api_limitations'] ?? 'Due to Facebook API limitations, direct video downloading may be restricted. Our service detects the URL, but downloading functionality may be limited.'; ?>
-                </div>
-                
-                <p class="mb-4"><?php echo $lang['facebook_terms_warning'] ?? 'Downloading videos from Facebook may violate the terms of service. We recommend only downloading your own content or content you have permission to download.'; ?></p>
-                
-                <div class="mt-4 space-y-2">
-                    <a href="<?php echo htmlspecialchars($directVideoUrl); ?>" download class="bg-blue-600 text-white font-semibold px-6 py-2 rounded hover:bg-blue-700 transition inline-block w-full text-center">
-                        <?php echo $lang['download_hd'] ?? 'Download in HD Quality'; ?>
-                    </a>
-                    <a href="<?php echo htmlspecialchars($directVideoUrl); ?>" download class="bg-blue-500 text-white font-semibold px-6 py-2 rounded hover:bg-blue-600 transition inline-block w-full text-center">
-                        <?php echo $lang['download_sd'] ?? 'Download in SD Quality'; ?>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Wyświetlenie przycisków do pobierania -->
+    <?php echo renderFacebookDownloadButtons($url); ?>
     <?php endif; ?>
     
-    <!-- About Facebook Downloader -->
-    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['about_facebook_downloader'] ?? 'About Facebook Downloader'; ?></h2>
-        
-        <div class="space-y-4">
-            <p><?php echo $lang['facebook_downloader_desc'] ?? 'Facebook Downloader is a tool that allows you to download public videos from Facebook. However, there are some important considerations to keep in mind:'; ?></p>
-            
-            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['facebook_api_limitations_title'] ?? 'Facebook API Limitations'; ?></h3>
-            <p><?php echo $lang['facebook_api_limitations_desc'] ?? 'Facebook regularly updates its API and security measures, which can affect the functionality of downloading tools. As a result, our service may have limited functionality.'; ?></p>
-            
-            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['facebook_terms_title'] ?? 'Facebook Terms of Service'; ?></h3>
-            <p><?php echo $lang['facebook_terms_desc'] ?? 'According to Facebook\'s terms of service, downloading content may be against their rules. Facebook states:'; ?></p>
-            
-            <div class="bg-gray-100 p-4 rounded-lg my-4">
-                <p><?php echo $lang['facebook_terms_quote'] ?? 'You will not collect users\' content or information, or otherwise access Facebook, using automated means (such as harvesting bots, robots, spiders, or scrapers) without our prior permission.'; ?></p>
-            </div>
-            
-            <h3 class="text-xl font-semibold mt-4"><?php echo $lang['legal_use_title'] ?? 'Legal Use'; ?></h3>
-            <p><?php echo $lang['facebook_legal_use_desc'] ?? 'There are situations where downloading videos from Facebook may be allowed:'; ?></p>
-            <ul class="list-disc pl-6 space-y-2">
-                <li><?php echo $lang['download_own_content'] ?? 'Downloading your own content (which you have published yourself)'; ?></li>
-                <li><?php echo $lang['download_with_permission'] ?? 'Content for which you have received explicit permission from the creator'; ?></li>
-                <li><?php echo $lang['download_licensed_content'] ?? 'Content shared under a license that allows downloading'; ?></li>
-            </ul>
-            
-            <div class="bg-yellow-50 p-4 rounded-lg mt-4">
-                <p class="text-yellow-800"><strong><?php echo $lang['note'] ?? 'Note:'; ?></strong> <?php echo $lang['respect_copyright'] ?? 'Always respect the copyright of other Facebook users. Downloading and using others\' content without permission may violate copyright law.'; ?></p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Instructions -->
+    <!-- Instrukcje -->
     <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['how_to_download_facebook'] ?? 'How to Download a Video from Facebook'; ?></h2>
         
@@ -183,4 +105,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
             </div>
         </div>
     </div>
+    
+    <!-- Informacje o prywatnych filmach -->
+    <div class="bg-white rounded-lg shadow-md p-6 mt-8">
+        <h2 class="text-2xl font-semibold mb-4">Jak pobrać prywatne filmy z Facebooka?</h2>
+        <p class="mb-4">Aby pobrać prywatne filmy z Facebooka, możesz skorzystać z jednej z poniższych metod:</p>
+        
+        <div class="space-y-6">
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Metoda 1: Użyj kodu źródłowego strony</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>Otwórz stronę Facebooka i zaloguj się do swojego konta</li>
+                    <li>Znajdź film, który chcesz pobrać</li>
+                    <li>Kliknij na czas publikacji filmu, aby otworzyć go w nowym oknie</li>
+                    <li>Naciśnij Ctrl+U (Windows) lub ⌘+Option+U (Mac), aby wyświetlić kod źródłowy strony</li>
+                    <li>Wklej kod źródłowy strony w nasze pole formularza powyżej i kliknij "Pobierz"</li>
+                </ol>
+            </div>
+            
+            <div class="bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Metoda 2: Użyj urządzenia mobilnego</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>Otwórz aplikację Facebook na swoim telefonie</li>
+                    <li>Znajdź film, który chcesz pobrać</li>
+                    <li>Dotknij przycisku "Udostępnij" pod filmem</li>
+                    <li>Wybierz opcję "Kopiuj link"</li>
+                    <li>Wklej link w naszym formularzu powyżej i kliknij "Pobierz"</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="bg-yellow-50 p-4 rounded-lg mt-6">
+            <p class="text-yellow-800">
+                <strong>Uwaga:</strong> Pobieranie filmów z Facebooka może naruszać warunki korzystania z usługi. 
+                Zalecamy pobieranie tylko własnych treści lub treści, na których pobieranie masz pozwolenie.
+            </p>
+        </div>
+    </div>
 </div>
+
+<!-- Skrypt do obsługi pobierania -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Funkcja do kopiowania linku do schowka
+    window.copyVideoLink = function(link) {
+        navigator.clipboard.writeText(link).then(function() {
+            alert('Link został skopiowany do schowka!');
+        }, function() {
+            // Fallback dla starszych przeglądarek
+            const textarea = document.createElement('textarea');
+            textarea.value = link;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('Link został skopiowany do schowka!');
+        });
+    };
+});
+</script>

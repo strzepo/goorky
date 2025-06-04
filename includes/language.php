@@ -107,3 +107,30 @@ function getSiteSettings() {
     
     return $settings;
 }
+
+function outputPopupTranslations() {
+    global $lang;
+    
+    // Keys needed for popup translations
+    $translationKeys = [
+        'confirm_action', 'confirm_bmi', 'confirm_calories', 'confirm_dates', 
+        'confirm_units', 'confirm_password', 'confirm_download', 'please_confirm', 
+        'by_clicking', 'confirm_button', 'cancel_button', 'continue_action', 
+        'yes', 'no', 'weight', 'height', 'age', 'gender', 'male', 'female',
+        'activity', 'sedentary', 'light', 'moderate', 'active', 'very_active',
+        'popup_message', 'buy_me_coffee', 'share_message'
+    ];
+    
+    // Create translations array
+    $translations = [];
+    foreach ($translationKeys as $key) {
+        if (isset($lang[$key])) {
+            $translations[$key] = $lang[$key];
+        }
+    }
+    
+    // Output as JavaScript
+    echo '<script>';
+    echo 'window.translations = ' . json_encode($translations, JSON_HEX_APOS | JSON_HEX_QUOT) . ';';
+    echo '</script>';
+}

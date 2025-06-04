@@ -1,4 +1,16 @@
-/* Animacje popupów */
+/**
+ * Popup styling and language support
+ */
+
+/* Popup Container */
+#cta-popup {
+    transition: opacity 0.3s ease;
+}
+
+#cta-popup:not([style*="display: none"]) {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -8,65 +20,101 @@
     }
 }
 
-@keyframes slideIn {
+/* Popup Content */
+#cta-popup .bg-white {
+    animation: scaleIn 0.3s ease-in-out;
+    transform-origin: center;
+}
+
+@keyframes scaleIn {
     from {
-        transform: translateY(-20px);
+        transform: scale(0.9);
         opacity: 0;
     }
     to {
-        transform: translateY(0);
+        transform: scale(1);
         opacity: 1;
     }
 }
 
-#popup-container {
-    animation: fadeIn 0.2s ease-out;
+/* Social Media Icons Hover Effects */
+#cta-popup .fa-facebook:hover {
+    color: #1877f2;
 }
 
-#popup-content {
-    animation: slideIn 0.3s ease-out;
+#cta-popup .fa-x-twitter:hover {
+    color: #1da1f2;
 }
 
-/* Style dla przycisków social media */
-#social-share-section a {
+#cta-popup .fa-linkedin:hover {
+    color: #0a66c2;
+}
+
+#cta-popup .fa-whatsapp:hover {
+    color: #25d366;
+}
+
+#cta-popup .fa-telegram:hover {
+    color: #0088cc;
+}
+
+#cta-popup .fa-reddit:hover {
+    color: #ff4500;
+}
+
+/* Close Button */
+#cta-popup button:first-child {
     transition: transform 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.05);
 }
 
-#social-share-section a:hover {
-    transform: scale(1.1);
-    background-color: rgba(0, 0, 0, 0.1);
+#cta-popup button:first-child:hover {
+    transform: scale(1.2);
 }
 
-/* Style dla przycisku z odliczaniem */
-#confirm-popup:disabled {
+/* Continue Button */
+#cta-popup #cta-submit {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#cta-popup #cta-submit:not([disabled]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#cta-popup #cta-submit[disabled] {
     cursor: not-allowed;
     opacity: 0.7;
 }
 
-#countdown-timer {
-    font-weight: bold;
+/* Popup Content Animations */
+#cta-popup p,
+#cta-popup .flex,
+#cta-popup .mb-4,
+#cta-popup #cta-submit {
+    animation: slideUp 0.4s ease-out forwards;
+    opacity: 0;
+    transform: translateY(10px);
 }
 
-/* Responsywność na urządzeniach mobilnych */
-@media (max-width: 640px) {
-    #popup-content {
-        width: 90%;
-        margin: 10px;
-    }
+#cta-popup p {
+    animation-delay: 0.1s;
+}
 
-    #social-share-section {
-        flex-direction: column;
-        align-items: center;
-    }
+#cta-popup .flex {
+    animation-delay: 0.2s;
+}
 
-    #social-share-section a {
-        margin-bottom: 8px;
+#cta-popup .mb-4:last-of-type {
+    animation-delay: 0.3s;
+}
+
+#cta-popup #cta-submit {
+    animation-delay: 0.4s;
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

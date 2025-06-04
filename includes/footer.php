@@ -123,7 +123,7 @@ if ((!isset($settings['show_ads']) || $settings['show_ads'] == '1') && !empty($s
 
     <!-- Confirm with timer -->
     <button id="cta-submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-medium transition" disabled>
-      <?php echo $lang['continue_action'] ?? 'Continue'; ?> (10s)
+      <?php echo $lang['continue_action'] ?? 'Continue'; ?> (5s)
     </button>
   </div>
 </div>
@@ -138,14 +138,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const popupSubmit = document.getElementById('cta-submit');
     const popupParameters = document.getElementById('popup-form-parameters');
     const continueText = '<?php echo $lang['continue_action'] ?? 'Continue'; ?>';
-    let timeLeft = 10;
+    let timeLeft = 5;
     let countdownTimer = null;
     
     // Function to start countdown
     function startPopupCountdown() {
         // Disable button at start
         popupSubmit.disabled = true;
-        timeLeft = 10;
+        timeLeft = 5;
         
         // Update button text with time
         popupSubmit.textContent = `${continueText} (${timeLeft}s)`;

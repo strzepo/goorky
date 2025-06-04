@@ -3,23 +3,28 @@
 $pageTitle = $lang['units_page_title'] ?? 'Unit Converter - Convert Length, Weight, and Temperature | Goorky.com';
 $pageDescription = $lang['units_page_description'] ?? 'Free online unit converter - easily convert length (m, cm, km, inches, feet), weight (kg, g, pounds), and temperature (°C, °F, K) in both directions.';
 
-// Inicjalizacja zmiennych
+// Inicjalizacja zmiennych - MUSI BYĆ NA POCZĄTKU
 $value = '';
 $from = '';
 $to = '';
-$type = 'length';
+$type = 'length'; // Domyślnie zawsze length
 $result = '';
 $hasResult = false;
 
 // Obsługa przesłanego formularza
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sprawdź czy zmieniono typ konwersji
-    if (isset($_POST['type']) && !isset($_POST['action_type'])) {
+    if (isset($_POST['type']) && !isset($_POST['action_type']) && !isset($_POST['convert_units'])) {
         $type = sanitizeInput($_POST['type'] ?? 'length');
+        
+        // Upewnienie się, że typ konwersji jest prawidłowy
+        if (!in_array($type, ['length', 'weight', 'temperature'])) {
+            $type = 'length';
+        }
     }
     
     // Sprawdź czy wykonano konwersję
-    if (isset($_POST['action_type']) && $_POST['action_type'] === 'convert_units') {
+    if (isset($_POST['convert_units']) || (isset($_POST['action_type']) && $_POST['action_type'] === 'convert_units')) {
         // Pobranie i walidacja danych
         $value = sanitizeNumber($_POST['value'] ?? '');
         $from = sanitizeInput($_POST['from'] ?? '');
@@ -120,7 +125,7 @@ function getUnitSymbol($unit) {
         <p class="mb-4"><?php echo $lang['units_intro'] ?? 'Quickly and easily convert between various measurement units... Choose the conversion type, source unit, target unit, and enter a value.'; ?></p>
         
         <form method="POST" action="/units" class="space-y-6" id="unitForm">
-            <input type="hidden" name="action_type" value="convert_units">
+            <input type="hidden" name="convert_units" value="">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="md:col-span-2">
                     <label for="type" class="block text-gray-700 font-medium mb-2"><?php echo $lang['conversion_type'] ?? 'Conversion type'; ?></label>
@@ -252,8 +257,295 @@ function getUnitSymbol($unit) {
     </div>
     <?php endif; ?>
     
-    <!-- Pozostała część kodu pozostaje bez zmian... -->
+    <!-- Call to Action Section -->
+    <div class="bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 rounded-lg shadow-md p-6 mb-8">
+        <div class="text-center">
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                    <span class="inline-block mr-2">💙</span>
+                    <?php echo $lang['cta_heading'] ?? 'Enjoyed using our Free Tools?'; ?>
+                </h3>
+                <p class="text-gray-600">
+                    <?php echo $lang['cta_description'] ?? 'Help others discover this free tool! Share it with your friends or support our work with a small donation.'; ?>
+                </p>
+            </div>
+            
+            <!-- Social Media Share Buttons -->
+            <div class="flex justify-center gap-2 mb-4 flex-wrap">
+                <a href="https://x.com/intent/tweet?text=<?php echo urlencode(($lang['cta_tweet_text'] ?? 'Check out this awesome Unit Converter! Convert length, weight, and temperature units instantly') . ' - '); ?>https://goorky.com/units" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm">
+                    <i class="fab fa-x-twitter mr-2"></i>
+                    <?php echo $lang['share_on_x'] ?? 'X'; ?>
+                </a>
+                
+                <a href="https://www.facebook.com/sharer/sharer.php?u=https://goorky.com/units" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                    <i class="fab fa-facebook mr-2"></i>
+                    <?php echo $lang['share_on_facebook'] ?? 'Facebook'; ?>
+                </a>
+                
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://goorky.com/units&title=<?php echo urlencode($lang['cta_linkedin_title'] ?? 'Free Unit Converter Tool'); ?>" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors text-sm">
+                    <i class="fab fa-linkedin mr-2"></i>
+                    <?php echo $lang['share_on_linkedin'] ?? 'LinkedIn'; ?>
+                </a>
+                
+                <a href="https://api.whatsapp.com/send?text=<?php echo urlencode(($lang['cta_whatsapp_text'] ?? 'Check out this free Unit Converter:') . ' https://goorky.com/units'); ?>" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm">
+                    <i class="fab fa-whatsapp mr-2"></i>
+                    <?php echo $lang['share_on_whatsapp'] ?? 'WhatsApp'; ?>
+                </a>
+                
+                <a href="https://t.me/share/url?url=https://goorky.com/units&text=<?php echo urlencode($lang['cta_telegram_text'] ?? 'Check out this free Unit Converter tool!'); ?>" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors text-sm">
+                    <i class="fab fa-telegram mr-2"></i>
+                    <?php echo $lang['share_on_telegram'] ?? 'Telegram'; ?>
+                </a>
+                
+                <a href="https://pinterest.com/pin/create/button/?url=https://goorky.com/units&description=<?php echo urlencode($lang['cta_pinterest_description'] ?? 'Free Unit Converter - Convert length, weight, and temperature units instantly!'); ?>" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+                    <i class="fab fa-pinterest mr-2"></i>
+                    <?php echo $lang['share_on_pinterest'] ?? 'Pinterest'; ?>
+                </a>
+                
+                <a href="https://www.reddit.com/submit?url=https://goorky.com/units&title=<?php echo urlencode($lang['cta_reddit_title'] ?? 'Free Unit Converter Tool - Convert between different units instantly'); ?>" 
+                   target="_blank" 
+                   class="inline-flex items-center px-3 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors text-sm">
+                    <i class="fab fa-reddit mr-2"></i>
+                    <?php echo $lang['share_on_reddit'] ?? 'Reddit'; ?>
+                </a>
+                
+                <a href="mailto:?subject=<?php echo urlencode($lang['cta_email_subject'] ?? 'Check out this Free Unit Converter'); ?>&body=<?php echo urlencode(($lang['cta_email_body'] ?? 'I found this awesome free unit converter tool that you might find useful:') . ' https://goorky.com/units'); ?>" 
+                   class="inline-flex items-center px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                    <i class="fas fa-envelope mr-2"></i>
+                    <?php echo $lang['share_via_email'] ?? 'Email'; ?>
+                </a>
+            </div>
+            
+            <!-- Separator -->
+            <div class="flex items-center justify-center my-4">
+                <span class="border-b border-gray-300 flex-grow max-w-xs"></span>
+                <span class="px-4 text-gray-500 text-sm font-medium uppercase tracking-wide">
+                    <?php echo $lang['or'] ?? 'or'; ?>
+                </span>
+                <span class="border-b border-gray-300 flex-grow max-w-xs"></span>
+            </div>
+            
+            <!-- Buy Coffee Button -->
+            <div class="mb-2">
+                <a href="https://buycoffee.to/lukson" 
+                   target="_blank" 
+                   class="inline-flex items-center px-6 py-3 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition-colors shadow-md hover:shadow-lg">
+                    <span class="text-lg mr-2">☕</span>
+                    <?php echo $lang['buy_me_coffee'] ?? 'Buy me a coffee'; ?>
+                </a>
+            </div>
+            
+            <p class="text-sm text-gray-500">
+                <?php echo $lang['cta_support_text'] ?? 'Your support helps us maintain and improve our free tools while keeping ads minimal!'; ?>
+            </p>
+        </div>
+    </div>
     
+    <!-- Informacje o jednostkach -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['conversion_tables'] ?? 'Conversion Tables'; ?></h2>
+        
+        <div class="space-y-6">
+            <?php if ($type === 'length'): ?>
+                <h3 class="text-xl font-semibold"><?php echo $lang['length'] ?? 'Length'; ?></h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['unit'] ?? 'Unit'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['millimeter'] ?? 'Millimeter (mm)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['centimeter'] ?? 'Centimeter (cm)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['meter'] ?? 'Meter (m)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['kilometer'] ?? 'Kilometer (km)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['inch'] ?? 'Inch (in)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['foot'] ?? 'Foot (ft)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['yard'] ?? 'Yard (yd)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['mile'] ?? 'Mile (mi)'; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">1 <?php echo $lang['symbol_mm'] ?? 'mm'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.000001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.03937</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.003281</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.001094</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.0000006214</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">1 <?php echo $lang['symbol_cm'] ?? 'cm'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">10</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.01</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.00001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.3937</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.03281</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.01094</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.000006214</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">1 <?php echo $lang['symbol_m'] ?? 'm'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1000</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">100</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">39.37</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">3.281</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1.094</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.0006214</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <?php elseif ($type === 'weight'): ?>
+                <h3 class="text-xl font-semibold"><?php echo $lang['weight'] ?? 'Weight'; ?></h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['unit'] ?? 'Unit'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['milligram'] ?? 'Milligram (mg)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['gram'] ?? 'Gram (g)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['kilogram'] ?? 'Kilogram (kg)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['ounce'] ?? 'Ounce (oz)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['pound'] ?? 'Pound (lb)'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['stone'] ?? 'Stone (st)'; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">1 <?php echo $lang['symbol_mg'] ?? 'mg'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.000001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.000035</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.0000022</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.00000016</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">1 <?php echo $lang['symbol_g'] ?? 'g'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1000</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.001</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.03527</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.002205</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.000157</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">1 <?php echo $lang['symbol_kg'] ?? 'kg'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1000000</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1000</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">1</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">35.274</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">2.205</td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700">0.157</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <?php elseif ($type === 'temperature'): ?>
+                <h3 class="text-xl font-semibold"><?php echo $lang['temperature'] ?? 'Temperature'; ?></h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['conversion'] ?? 'Conversion'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['formula'] ?? 'Formula'; ?></th>
+                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><?php echo $lang['example'] ?? 'Example'; ?></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo $lang['celsius_to_fahrenheit'] ?? 'Celsius to Fahrenheit'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['celsius_to_fahrenheit_formula'] ?? '°F = (°C × 9/5) + 32'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['celsius_to_fahrenheit_example'] ?? '20°C = 68°F'; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo $lang['fahrenheit_to_celsius'] ?? 'Fahrenheit to Celsius'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['fahrenheit_to_celsius_formula'] ?? '°C = (°F - 32) × 5/9'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['fahrenheit_to_celsius_example'] ?? '68°F = 20°C'; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo $lang['celsius_to_kelvin'] ?? 'Celsius to Kelvin'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['celsius_to_kelvin_formula'] ?? 'K = °C + 273.15'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['celsius_to_kelvin_example'] ?? '20°C = 293.15K'; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo $lang['kelvin_to_celsius'] ?? 'Kelvin to Celsius'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['kelvin_to_celsius_formula'] ?? '°C = K - 273.15'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['kelvin_to_celsius_example'] ?? '293.15K = 20°C'; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo $lang['fahrenheit_to_kelvin'] ?? 'Fahrenheit to Kelvin'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['fahrenheit_to_kelvin_formula'] ?? 'K = (°F - 32) × 5/9 + 273.15'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['fahrenheit_to_kelvin_example'] ?? '68°F = 293.15K'; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900"><?php echo $lang['kelvin_to_fahrenheit'] ?? 'Kelvin to Fahrenheit'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['kelvin_to_fahrenheit_formula'] ?? '°F = (K - 273.15) × 9/5 + 32'; ?></td>
+                                <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-700"><?php echo $lang['kelvin_to_fahrenheit_example'] ?? '293.15K = 68°F'; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    
+    <!-- Informacje o jednostkach -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['about_units'] ?? 'About Units'; ?></h2>
+        
+        <div class="space-y-6">
+            <?php if ($type === 'length'): ?>
+                <h3 class="text-xl font-semibold"><?php echo $lang['length_units'] ?? 'Length Units'; ?></h3>
+                <p><?php echo $lang['length_units_desc'] ?? 'Length units are used to measure the distance between two points. There are different unit systems, including metric and imperial.'; ?></p>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong><?php echo $lang['metric_system'] ?? 'Metric system:'; ?></strong> <?php echo $lang['metric_system_units'] ?? 'Millimeter (mm), centimeter (cm), meter (m), kilometer (km)'; ?></li>
+                    <li><strong><?php echo $lang['imperial_system'] ?? 'Imperial system:'; ?></strong> <?php echo $lang['imperial_system_units'] ?? 'Inch (in), foot (ft), yard (yd), mile (mi)'; ?></li>
+                </ul>
+                
+                <p><?php echo $lang['length_basic_unit'] ?? 'The basic unit in the metric system is the meter (m), while in the imperial system, different basic units are used depending on the context.'; ?></p>
+            <?php elseif ($type === 'weight'): ?>
+                <h3 class="text-xl font-semibold"><?php echo $lang['weight_units'] ?? 'Weight Units'; ?></h3>
+                <p><?php echo $lang['weight_units_desc'] ?? 'Weight (mass) units are used to determine the amount of matter in an object. Like length, there are two main systems: metric and imperial.'; ?></p>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong><?php echo $lang['metric_system'] ?? 'Metric system:'; ?></strong> <?php echo $lang['metric_system_weight_units'] ?? 'Milligram (mg), gram (g), kilogram (kg)'; ?></li>
+                    <li><strong><?php echo $lang['imperial_system'] ?? 'Imperial system:'; ?></strong> <?php echo $lang['imperial_system_weight_units'] ?? 'Ounce (oz), pound (lb), stone (st)'; ?></li>
+                </ul>
+                
+                <p><?php echo $lang['weight_basic_unit'] ?? 'The basic unit in the metric system is the kilogram (kg), while in the imperial system the pound (lb) is most commonly used.'; ?></p>
+            <?php elseif ($type === 'temperature'): ?>
+                <h3 class="text-xl font-semibold"><?php echo $lang['temperature_units'] ?? 'Temperature Units'; ?></h3>
+                <p><?php echo $lang['temperature_units_desc'] ?? 'Temperature is a measure of the kinetic energy of molecules. There are three main temperature scales:'; ?></p>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong><?php echo $lang['celsius_scale'] ?? 'Celsius scale (°C):'; ?></strong> <?php echo $lang['celsius_scale_desc'] ?? 'Used in most countries worldwide. The freezing point of water is 0°C, and the boiling point is 100°C.'; ?></li>
+                    <li><strong><?php echo $lang['fahrenheit_scale'] ?? 'Fahrenheit scale (°F):'; ?></strong> <?php echo $lang['fahrenheit_scale_desc'] ?? 'Used mainly in the USA. The freezing point of water is 32°F, and the boiling point is 212°F.'; ?></li>
+                    <li><strong><?php echo $lang['kelvin_scale'] ?? 'Kelvin scale (K):'; ?></strong> <?php echo $lang['kelvin_scale_desc'] ?? 'Used in science. This is an absolute scale, where 0K is absolute zero (-273.15°C). The degree symbol is not used.'; ?></li>
+                </ul>
+                
+                <p><?php echo $lang['kelvin_absolute_scale'] ?? 'The Kelvin scale is an absolute scale, meaning 0K is the lowest possible theoretical temperature (absolute zero), at which molecules have no kinetic energy.'; ?></p>
+            <?php endif; ?>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -277,24 +569,6 @@ function submitTypeChange() {
     form.submit();
 }
 
-// Funkcja do wykonania konwersji (wywoływana po zakończeniu popup-a)
-function executeConversion() {
-    const form = document.getElementById('unitForm');
-    
-    // Dodaj ukryte pole convert_units
-    let convertInput = form.querySelector('input[name="convert_units"]');
-    if (!convertInput) {
-        convertInput = document.createElement('input');
-        convertInput.type = 'hidden';
-        convertInput.name = 'convert_units';
-        convertInput.value = '1';
-        form.appendChild(convertInput);
-    }
-    
-    // Wyślij formularz
-    form.submit();
-}
-
 // Event listener dla przycisków typu konwersji
 document.addEventListener('DOMContentLoaded', function() {
     const typeRadios = document.querySelectorAll('input[name="type"]');
@@ -303,12 +577,5 @@ document.addEventListener('DOMContentLoaded', function() {
             submitTypeChange();
         });
     });
-    
-    // NIE dodawaj event listenera do trigger-popup
-    // Pozwól istniejącemu systemowi popup obsłużyć to
-    // System popup powinien wywołać executeConversion() po odliczeniu
 });
-
-// Udostępnij funkcję globalnie, żeby system popup mógł ją wywołać
-window.executeConversion = executeConversion;
 </script>

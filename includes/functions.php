@@ -182,6 +182,7 @@ function calculateDateDifference($date1, $date2) {
     return $interval->days;
 }
 
+
 /**
  * Generates a secure password
  * @param int $length Długość hasła

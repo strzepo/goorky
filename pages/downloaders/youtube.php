@@ -76,6 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_youtube'])) 
         </div>
     </div>
     <?php endif; ?>
+
+        <!-- Social Media Buttons -->
+        <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- Informacje o YouTube Downloader -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">

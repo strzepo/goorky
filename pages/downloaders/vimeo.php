@@ -114,6 +114,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_vimeo'])) {
         </div>
     </div>
     <?php endif; ?>
+
+        <!-- Social Media Buttons -->
+        <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- About Vimeo Downloader -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">

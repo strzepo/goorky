@@ -152,6 +152,9 @@ function getActivityDescription($activity) {
         </div>
     </div>
     <?php endif; ?>
+
+        <!-- Social Media Buttons -->
+        <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- Informacje o zapotrzebowaniu kalorycznym -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">

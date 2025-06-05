@@ -147,7 +147,11 @@ try {
     });
 </script>
 
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7818948548485078"
+     crossorigin="anonymous"></script>
 
+<meta name="google-adsense-account" content="ca-pub-7818948548485078">
 
 </head>
 <body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">

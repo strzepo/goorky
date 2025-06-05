@@ -197,6 +197,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
         <?php endif; ?>
     </div>
     <?php endif; ?>
+
+        <!-- Social Media Buttons -->
+        <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- Informacje o kalkulatorze dat -->
     <div class="bg-white rounded-lg shadow-md p-6">

@@ -72,6 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_facebook']))
     <!-- Wyświetlenie przycisków do pobierania -->
     <?php echo renderFacebookDownloadButtons($url); ?>
     <?php endif; ?>
+
+        <!-- Social Media Buttons -->
+        <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- Instrukcje -->
     <div class="bg-white rounded-lg shadow-md p-6">

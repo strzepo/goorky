@@ -107,6 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_type']) && $_P
         </div>
     </div>
     <?php endif; ?>
+
+        <!-- Social Media Buttons -->
+        <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- Informacje o BMI -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">

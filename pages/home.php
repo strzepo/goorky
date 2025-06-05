@@ -141,6 +141,9 @@ $pageDescription = $lang['home_description'] ?? 'Free online tools: BMI and calo
     </div>
 </div>
 
+    <!-- Social Media Buttons -->
+    <?php include BASE_PATH . '/includes/social.php'; ?>
+
 <!-- Informacje o stronie -->
 <div class="bg-gray-100 rounded-lg p-8 mb-12">
     <h2 class="text-3xl font-bold mb-4"><?php echo $lang['home_about_title'] ?? 'About Our Tools'; ?></h2>

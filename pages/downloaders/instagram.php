@@ -103,6 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['download_instagram'])
     </div>
     <?php endif; ?>
     
+    <!-- Social Media Buttons -->
+    <?php include BASE_PATH . '/includes/social.php'; ?>
+
     <!-- About Instagram Downloader -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 class="text-2xl font-semibold mb-4"><?php echo $lang['about_instagram_downloader'] ?? 'About Instagram Downloader'; ?></h2>

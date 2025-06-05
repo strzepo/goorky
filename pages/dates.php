@@ -67,12 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
         <p class="mb-4"><?php echo $lang['dates_intro'] ?? 'Calculate the difference between two dates or add/subtract a specific number of days from a date.'; ?></p>
         
-        <div x-data="{ operation: '<?php echo $operation; ?>' }">
+        <form method="POST" action="/dates" class="space-y-6" id="dateForm">
+            <input type="hidden" name="calculate_dates" value="">
+            
             <div class="mb-6">
                 <label class="block text-gray-700 font-medium mb-2"><?php echo $lang['choose_operation'] ?? 'Select operation'; ?></label>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <label class="inline-flex items-center justify-center p-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 <?php echo ($operation === 'difference') ? 'bg-blue-100 border-2 border-blue-400' : ''; ?>">
-                        <input type="radio" name="operation" value="difference" x-model="operation" class="hidden">
+                        <input type="radio" name="operation" value="difference" <?php echo ($operation === 'difference') ? 'checked' : ''; ?> class="hidden">
                         <div class="text-center">
                             <svg class="h-8 w-8 mx-auto text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
@@ -82,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
                     </label>
                     
                     <label class="inline-flex items-center justify-center p-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 <?php echo ($operation === 'add') ? 'bg-blue-100 border-2 border-blue-400' : ''; ?>">
-                        <input type="radio" name="operation" value="add" x-model="operation" class="hidden">
+                        <input type="radio" name="operation" value="add" <?php echo ($operation === 'add') ? 'checked' : ''; ?> class="hidden">
                         <div class="text-center">
                             <svg class="h-8 w-8 mx-auto text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -92,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
                     </label>
                     
                     <label class="inline-flex items-center justify-center p-4 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 <?php echo ($operation === 'subtract') ? 'bg-blue-100 border-2 border-blue-400' : ''; ?>">
-                        <input type="radio" name="operation" value="subtract" x-model="operation" class="hidden">
+                        <input type="radio" name="operation" value="subtract" <?php echo ($operation === 'subtract') ? 'checked' : ''; ?> class="hidden">
                         <div class="text-center">
                             <svg class="h-8 w-8 mx-auto text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
@@ -103,42 +105,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
                 </div>
             </div>
             
-            <form method="POST" action="/dates" class="space-y-6">
-                <input type="hidden" name="operation" x-bind:value="operation">
-                
-                <div x-show="operation === 'difference'">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="date1" class="block text-gray-700 font-medium mb-2"><?php echo $lang['first_date'] ?? 'First date'; ?></label>
-                            <input type="date" name="date1" id="date1" value="<?php echo htmlspecialchars($date1); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        
-                        <div>
-                            <label for="date2" class="block text-gray-700 font-medium mb-2"><?php echo $lang['second_date'] ?? 'Second date'; ?></label>
-                            <input type="date" name="date2" id="date2" value="<?php echo htmlspecialchars($date2); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
+            <div id="difference-fields" <?php echo ($operation !== 'difference') ? 'style="display: none;"' : ''; ?>>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="date1_diff" class="block text-gray-700 font-medium mb-2"><?php echo $lang['first_date'] ?? 'First date'; ?></label>
+                        <input type="date" name="date1" id="date1_diff" value="<?php echo ($operation === 'difference') ? htmlspecialchars($date1) : ''; ?>" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="date2" class="block text-gray-700 font-medium mb-2"><?php echo $lang['second_date'] ?? 'Second date'; ?></label>
+                        <input type="date" name="date2" id="date2" value="<?php echo ($operation === 'difference') ? htmlspecialchars($date2) : ''; ?>" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
-                
-                <div x-show="operation === 'add' || operation === 'subtract'">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="date1" class="block text-gray-700 font-medium mb-2"><?php echo $lang['date'] ?? 'Date'; ?></label>
-                            <input type="date" name="date1" id="date1" value="<?php echo htmlspecialchars($date1); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-                        
-                        <div>
-                            <label for="days" class="block text-gray-700 font-medium mb-2"><?php echo $lang['number_of_days'] ?? 'Number of days'; ?></label>
-                            <input type="number" name="days" id="days" min="1" value="<?php echo htmlspecialchars($days); ?>" required class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
+            </div>
+            
+            <div id="add-subtract-fields" <?php echo ($operation === 'difference') ? 'style="display: none;"' : ''; ?>>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="date1_calc" class="block text-gray-700 font-medium mb-2"><?php echo $lang['date'] ?? 'Date'; ?></label>
+                        <input type="date" name="date1" id="date1_calc" value="<?php echo ($operation !== 'difference') ? htmlspecialchars($date1) : ''; ?>" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="days" class="block text-gray-700 font-medium mb-2"><?php echo $lang['number_of_days'] ?? 'Number of days'; ?></label>
+                        <input type="number" name="days" id="days" min="1" value="<?php echo ($operation !== 'difference') ? htmlspecialchars($days) : ''; ?>" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
-                
-                <div class="text-center">
-                     <button type="button" name="calculate_dates" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate'] ?? 'Calculate'; ?></button>
-                </div>
-            </form>
-        </div>
+            </div>
+            
+            <div class="text-center">
+                <button type="button" class="trigger-popup bg-blue-600 text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 transition"><?php echo $lang['calculate'] ?? 'Calculate'; ?></button>
+            </div>
+        </form>
     </div>
     
     <?php if ($hasResult): ?>
@@ -182,9 +180,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
                 <div class="text-3xl font-bold text-blue-600">
                     <?php 
                     if ($operation === 'add') {
-                        echo $lang['after_adding'] ?? "After adding {$days} days to {$date1}";
+                        echo str_replace(['{days}', '{date1}'], [$days, formatFriendlyDate($date1)], $lang['after_adding'] ?? "After adding {$days} days to " . formatFriendlyDate($date1));
                     } else {
-                        echo $lang['after_subtracting'] ?? "After subtracting {$days} days from {$date1}";
+                        echo str_replace(['{days}', '{date1}'], [$days, formatFriendlyDate($date1)], $lang['after_subtracting'] ?? "After subtracting {$days} days from " . formatFriendlyDate($date1));
                     }
                     ?>
                 </div>
@@ -198,8 +196,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
     </div>
     <?php endif; ?>
 
-        <!-- Social Media Buttons -->
-        <?php include BASE_PATH . '/includes/social.php'; ?>
+     <!-- Social Media Buttons -->
+     <?php include BASE_PATH . '/includes/social.php'; ?>
     
     <!-- Informacje o kalkulatorze dat -->
     <div class="bg-white rounded-lg shadow-md p-6">
@@ -233,3 +231,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_dates'])) {
         </div>
     </div>
 </div>
+
+<script>
+// JavaScript do obsługi przełączania między typami operacji
+document.addEventListener('DOMContentLoaded', function() {
+    const operationRadios = document.querySelectorAll('input[name="operation"]');
+    const differenceFields = document.getElementById('difference-fields');
+    const addSubtractFields = document.getElementById('add-subtract-fields');
+    
+    function updateFieldsVisibility() {
+        const selectedOperation = document.querySelector('input[name="operation"]:checked').value;
+        
+        if (selectedOperation === 'difference') {
+            differenceFields.style.display = 'block';
+            addSubtractFields.style.display = 'none';
+            
+            // Ustaw required dla pól różnicy
+            document.getElementById('date1_diff').required = true;
+            document.getElementById('date2').required = true;
+            document.getElementById('date1_calc').required = false;
+            document.getElementById('days').required = false;
+            
+            // Ustaw dzisiejszą datę jeśli pola są puste
+            const today = new Date().toISOString().split('T')[0];
+            if (!document.getElementById('date1_diff').value) {
+                document.getElementById('date1_diff').value = today;
+            }
+            if (!document.getElementById('date2').value) {
+                document.getElementById('date2').value = today;
+            }
+        } else {
+            differenceFields.style.display = 'none';
+            addSubtractFields.style.display = 'block';
+            
+            // Ustaw required dla pól dodawania/odejmowania
+            document.getElementById('date1_diff').required = false;
+            document.getElementById('date2').required = false;
+            document.getElementById('date1_calc').required = true;
+            document.getElementById('days').required = true;
+            
+            // Ustaw dzisiejszą datę i domyślną liczbę dni
+            const today = new Date().toISOString().split('T')[0];
+            if (!document.getElementById('date1_calc').value) {
+                document.getElementById('date1_calc').value = today;
+            }
+            if (!document.getElementById('days').value) {
+                document.getElementById('days').value = '1';
+            }
+        }
+        
+        // Aktualizuj style przycisków
+        operationRadios.forEach(radio => {
+            const label = radio.closest('label');
+            if (radio.checked) {
+                label.classList.add('bg-blue-100', 'border-2', 'border-blue-400');
+                label.classList.remove('bg-gray-100');
+            } else {
+                label.classList.remove('bg-blue-100', 'border-2', 'border-blue-400');
+                label.classList.add('bg-gray-100');
+            }
+        });
+    }
+    
+    // Dodaj event listenery do radio buttonów
+    operationRadios.forEach(radio => {
+        radio.addEventListener('change', updateFieldsVisibility);
+    });
+    
+    // Inicjalna aktualizacja widoczności pól
+    updateFieldsVisibility();
+});
+</script>

@@ -215,6 +215,7 @@ $lang = [
     'use_expiry_dates' => 'Calculating document expiry dates',
     'use_travel_planning' => 'Travel planning and bookings',
 
+
     // Password Generator
     'password_page_title' => 'Password Generator - Create Secure, Random Passwords | Goorky.com',
     'password_page_description' => 'Free online password generator - create secure, random passwords of selected length and complexity. Enhance the security of your online accounts.',
@@ -634,5 +635,19 @@ $lang = [
     'cta_by_clicking' => 'By clicking "Confirm", the calculation will be performed.',
     'cta_confirm_button' => 'Confirm',
     'cta_cancel_button' => 'Cancel',
+
+    // Dates
+'month_january' => 'January',
+'month_february' => 'February',
+'month_march' => 'March',
+'month_april' => 'April',
+'month_may' => 'May',
+'month_june' => 'June',
+'month_july' => 'July',
+'month_august' => 'August',
+'month_september' => 'September',
+'month_october' => 'October',
+'month_november' => 'November',
+'month_december' => 'December',
         
 ];

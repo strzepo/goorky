@@ -226,13 +226,35 @@ function generatePassword($length, $useSpecial, $useNumbers, $useUpper, $useLowe
 }
 
 /**
- * Formats a date in a human-friendly way
+ * Formats a date in a human-friendly way with proper translation support
  * @param string $date Data w formacie Y-m-d
  * @return string Sformatowana data
  */
 function formatFriendlyDate($date) {
+    global $lang;
+    
     $datetime = new DateTime($date);
-    return $datetime->format('j F Y');
+    $day = $datetime->format('j');
+    $month = $datetime->format('n'); // 1-12
+    $year = $datetime->format('Y');
+    
+    // Tablica nazw miesięcy do tłumaczenia
+    $months = [
+        1 => $lang['month_january'] ?? 'January',
+        2 => $lang['month_february'] ?? 'February',
+        3 => $lang['month_march'] ?? 'March',
+        4 => $lang['month_april'] ?? 'April',
+        5 => $lang['month_may'] ?? 'May',
+        6 => $lang['month_june'] ?? 'June',
+        7 => $lang['month_july'] ?? 'July',
+        8 => $lang['month_august'] ?? 'August',
+        9 => $lang['month_september'] ?? 'September',
+        10 => $lang['month_october'] ?? 'October',
+        11 => $lang['month_november'] ?? 'November',
+        12 => $lang['month_december'] ?? 'December'
+    ];
+    
+    return $day . ' ' . $months[$month] . ' ' . $year;
 }
 
 /**

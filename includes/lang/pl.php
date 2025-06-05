@@ -635,4 +635,17 @@ $lang = [
 'cta_by_clicking' => 'Klikając „Potwierdź”, zostanie wykonane działanie.',
 'cta_confirm_button' => 'Potwierdź',
 'cta_cancel_button' => 'Anuluj',
+
+'month_january' => 'styczeń',
+'month_february' => 'luty',
+'month_march' => 'marzec',
+'month_april' => 'kwiecień',
+'month_may' => 'maj',
+'month_june' => 'czerwiec',
+'month_july' => 'lipiec',
+'month_august' => 'sierpień',
+'month_september' => 'wrzesień',
+'month_october' => 'październik',
+'month_november' => 'listopad',
+'month_december' => 'grudzień',
 ];
